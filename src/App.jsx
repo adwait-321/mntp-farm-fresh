@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-
+import { useState } from "react";
 const style = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Satisfy&display=swap');
 
