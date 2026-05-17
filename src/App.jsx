@@ -434,9 +434,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("story");
   const [formData, setFormData] = useState({ name: "", company: "", email: "", phone: "", product: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [activeProductImg, setActiveProductImg] = useState({});
-  const [productSearch, setProductSearch] = useState("");
-  const [productFilter, setProductFilter] = useState("All Products");
+
 
   const handleSubmit = () => {
     if (formData.name && formData.email) {
