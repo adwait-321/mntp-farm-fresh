@@ -58,20 +58,6 @@ const IMGS = {
 
 const PRODUCTS = [
   {
-    name: "Dehydrated Onion",
-    desc: "Premium quality dehydrated onion — exported globally with consistent pungency and colour retention. Processed within hours of harvest for maximum freshness.",
-    forms: ["Flakes", "Minced", "Powder", "Granules", "Chopped"],
-    mainImg: IMGS.onion1, thumbs: [IMGS.onion2, IMGS.onion3],
-    specs: { "Moisture": "≤5%", "Colour": "White to Off-white", "Pungency": "High", "Shelf Life": "24 months", "Packaging": "10kg / 25kg bags", "Origin": "Solapur, Maharashtra" }
-  },
-  {
-    name: "Dehydrated Garlic",
-    desc: "Sun-cured and air-dried garlic rich in allicin. Ideal for culinary and industrial use — available in flakes, granules, and powder.",
-    forms: ["Flakes", "Granules", "Powder", "Minced"],
-    mainImg: IMGS.garlic1, thumbs: [IMGS.garlic2, IMGS.garlic3],
-    specs: { "Moisture": "≤6%", "Colour": "Cream to Light Yellow", "Allicin": "High Retention", "Shelf Life": "24 months", "Packaging": "10kg / 25kg bags", "Origin": "Maharashtra" }
-  },
-  {
     name: "Dehydrated Coriander",
     desc: "Bright-green dried coriander leaves preserving natural oils and flavour. Perfect for seasoning, spice blends, and ready-meal manufacturing.",
     forms: ["Leaves", "Seeds", "Powder", "Crushed"],
@@ -91,6 +77,27 @@ const PRODUCTS = [
     forms: ["Sliced", "Powder", "Granules", "Splits"],
     mainImg: IMGS.ginger1, thumbs: [IMGS.ginger2],
     specs: { "Moisture": "≤10%", "Colour": "Light Tan", "Gingerol": "Retained", "Shelf Life": "24 months", "Packaging": "10kg / 25kg bags", "Origin": "Kerala / Maharashtra" }
+  },
+  {
+    name: "Dehydrated Spring Onion",
+    desc: "Freshly harvested spring onions dehydrated to lock in their mild, sweet flavour and vibrant green colour. Ideal for instant noodles, soups, and seasoning blends.",
+    forms: ["Flakes", "Chopped", "Powder"],
+    mainImg: IMGS.vegmix1, thumbs: [IMGS.vegmix2],
+    specs: { "Moisture": "≤6%", "Colour": "Green to White", "Flavour": "Mild & Sweet", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra" }
+  },
+  {
+    name: "Dehydrated Carrot",
+    desc: "Bright orange carrot slices and powder with retained beta-carotene and natural sweetness. Widely used in soups, baby food, and health products.",
+    forms: ["Flakes", "Powder", "Diced", "Granules"],
+    mainImg: IMGS.vegmix2, thumbs: [IMGS.vegmix1],
+    specs: { "Moisture": "≤7%", "Colour": "Bright Orange", "Beta-Carotene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 25kg bags", "Origin": "Maharashtra / Rajasthan" }
+  },
+  {
+    name: "Dehydrated Tomato",
+    desc: "Sun-dried and tunnel-dried tomatoes with rich colour and concentrated flavour. Available in flakes, powder, and sun-dried form for sauces, seasonings, and snacks.",
+    forms: ["Flakes", "Powder", "Sun-Dried"],
+    mainImg: IMGS.chilli2, thumbs: [IMGS.chilli1],
+    specs: { "Moisture": "≤7%", "Colour": "Deep Red", "Lycopene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra / Karnataka" }
   },
   {
     name: "Dehydrated Vegetable Mix",
@@ -212,39 +219,42 @@ const style = `
   .home-ci-val { font-size: 14px; color: var(--text-mid); line-height: 1.5; }
 
   /* PRODUCTS */
-  .products-hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); padding: 80px 80px 60px; text-align: center; }
-  .products-hero .section-title { color: var(--cream); margin: 0 auto 16px; }
-  .products-hero .section-label { text-align: center; color: var(--amber-light); }
-  .products-hero .section-body { color: rgba(245,240,232,0.7); margin: 0 auto; text-align: center; max-width: 560px; }
-  .products-list { background: var(--white); }
-  .product-row { display: grid; grid-template-columns: 340px 1fr; border-bottom: 1px solid var(--cream-dark); transition: background 0.25s; }
-  .product-row:last-child { border-bottom: none; }
-  .product-row:hover { background: var(--cream); }
-  .product-row-imgs { position: relative; height: 280px; overflow: hidden; background: var(--cream-dark); }
-  .product-row-main-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
-  .product-row:hover .product-row-main-img { transform: scale(1.05); }
-  .product-row-thumbs { position: absolute; bottom: 12px; left: 12px; display: flex; gap: 8px; }
-  .product-thumb { width: 52px; height: 52px; border-radius: 8px; overflow: hidden; border: 2px solid rgba(255,255,255,0.8); cursor: pointer; transition: transform 0.2s; }
-  .product-thumb:hover { transform: scale(1.1); }
-  .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .product-row-info { padding: 36px 48px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
-  .product-row-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-  .product-row-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--green-deep); }
-  .product-row-badge { background: var(--green-deep); color: var(--cream); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 6px; }
-  .product-row-desc { font-size: 14px; color: var(--text-mid); line-height: 1.75; max-width: 520px; }
-  .product-forms-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--green-fresh); margin-bottom: 8px; font-weight: 500; }
-  .product-row-forms { display: flex; flex-wrap: wrap; gap: 6px; }
-  .product-form-tag { background: var(--cream-dark); color: var(--green-mid); font-size: 11px; padding: 4px 12px; border-radius: 100px; }
-  .product-specs { border: 1px solid var(--cream-dark); border-radius: 12px; overflow: hidden; }
-  .product-specs-title { background: var(--green-deep); color: var(--cream); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; font-weight: 500; }
-  .specs-table { display: grid; grid-template-columns: 1fr 1fr; }
-  .spec-row { padding: 8px 16px; border-bottom: 1px solid var(--cream-dark); border-right: 1px solid var(--cream-dark); display: flex; flex-direction: column; gap: 2px; }
-  .spec-row:nth-child(even) { border-right: none; }
-  .spec-row:nth-last-child(-n+2) { border-bottom: none; }
-  .spec-key { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--green-fresh); font-weight: 500; }
-  .spec-val { font-size: 13px; color: var(--text-dark); }
-  .product-quote-btn { align-self: flex-start; background: var(--amber); color: var(--white); border: none; padding: 10px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-  .product-quote-btn:hover { background: var(--amber-light); transform: translateY(-1px); }
+  /* PRODUCTS - Silva-inspired grid */
+  .products-page { background: #f7f5f0; min-height: calc(100vh - 72px); }
+  .products-sidebar { width: 280px; flex-shrink: 0; background: var(--white); border-right: 1px solid var(--cream-dark); padding: 40px 28px; position: sticky; top: 72px; height: calc(100vh - 72px); overflow-y: auto; }
+  .sidebar-brand { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--green-deep); margin-bottom: 6px; }
+  .sidebar-tagline { font-size: 12px; color: var(--text-mid); margin-bottom: 32px; line-height: 1.5; }
+  .sidebar-section-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--green-mid); font-weight: 600; margin-bottom: 16px; }
+  .sidebar-search { width: 100%; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-dark); background: var(--white); outline: none; margin-bottom: 28px; transition: border-color 0.2s; }
+  .sidebar-search:focus { border-color: var(--green-fresh); }
+  .sidebar-filter-group { margin-bottom: 28px; }
+  .sidebar-filter-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; }
+  .sidebar-radio { width: 16px; height: 16px; border: 2px solid var(--cream-dark); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
+  .sidebar-radio.active { border-color: var(--amber); }
+  .sidebar-radio.active::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); display: block; }
+  .sidebar-filter-label { font-size: 14px; color: var(--text-mid); }
+  .sidebar-filter-label.active { color: var(--green-deep); font-weight: 500; }
+  .sidebar-search-btn { width: 100%; background: var(--amber); color: var(--white); border: none; padding: 12px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+  .sidebar-search-btn:hover { background: var(--amber-light); }
+  .sidebar-clear { background: none; border: none; color: var(--text-mid); font-size: 13px; cursor: pointer; margin-top: 10px; display: flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
+  .sidebar-clear:hover { color: var(--green-mid); }
+
+  .products-main { flex: 1; padding: 48px 48px 80px; }
+  .products-main-header { margin-bottom: 36px; }
+  .products-main-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--green-deep); margin-bottom: 8px; }
+  .products-main-sub { font-size: 14px; color: var(--text-mid); }
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+  .product-card { background: var(--white); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 1px solid transparent; display: flex; flex-direction: column; align-items: center; padding: 32px 24px 24px; text-align: center; }
+  .product-card:hover { border-color: var(--cream-dark); box-shadow: 0 8px 32px rgba(26,58,31,0.1); transform: translateY(-4px); }
+  .product-card-img-wrap { width: 180px; height: 180px; border-radius: 50%; overflow: hidden; background: #f0ede6; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; border: 3px solid #e8e2d6; flex-shrink: 0; }
+  .product-card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+  .product-card:hover .product-card-img { transform: scale(1.07); }
+  .product-card-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--green-deep); margin-bottom: 8px; }
+  .product-card-forms { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 16px; }
+  .product-card-form { background: var(--cream); color: var(--green-mid); font-size: 10px; padding: 3px 10px; border-radius: 100px; letter-spacing: 0.5px; }
+  .product-card-btn { background: var(--green-deep); color: var(--cream); border: none; padding: 9px 22px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
+  .product-card-btn:hover { background: var(--amber); }
+  .products-no-results { text-align: center; padding: 80px 0; color: var(--text-mid); font-size: 16px; }
   .products-cta-strip { background: var(--green-deep); padding: 48px 80px; text-align: center; }
 
   /* QUALITY */
@@ -354,9 +364,10 @@ const style = `
     footer { padding: 40px 24px 20px; }
     .footer-top { flex-direction: column; gap: 16px; text-align: center; }
     .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
-    .product-row { grid-template-columns: 1fr; }
-    .product-row-imgs { height: 220px; }
-    .product-row-info { padding: 24px; }
+    .products-page { flex-direction: column; }
+    .products-sidebar { width: 100%; height: auto; position: static; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .products-main { padding: 24px; }
     .quality-img-grid { grid-template-columns: 1fr; }
     .quality-img-cell { height: 220px; }
     .home-enquiry-form { padding: 24px; }
@@ -424,6 +435,8 @@ export default function App() {
   const [formData, setFormData] = useState({ name: "", company: "", email: "", phone: "", product: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [activeProductImg, setActiveProductImg] = useState({});
+  const [productSearch, setProductSearch] = useState("");
+  const [productFilter, setProductFilter] = useState("All Products");
 
   const handleSubmit = () => {
     if (formData.name && formData.email) {
@@ -582,57 +595,25 @@ export default function App() {
 
         {activeTab === "products" && (
           <div className="page" key="products">
-            <div className="products-hero">
-              <div className="section-label">Dehydrated Range</div>
-              <h2 className="section-title">Our Products</h2>
-              <p className="section-body">100% natural, chemical-free dehydrated vegetables and spices — crafted for consistent quality across every shipment.</p>
-            </div>
-            <div className="products-list">
-              {PRODUCTS.map((p, i) => {
-                const activeImg = activeProductImg[i] ?? p.mainImg;
-                return (
-                  <div className="product-row" key={i}>
-                    <div className="product-row-imgs">
-                      <img src={activeImg} alt={p.name} className="product-row-main-img" loading="lazy" onError={e => e.target.style.display='none'} />
-                      <div className="product-row-thumbs">
-                        <div className="product-thumb" onClick={() => setActiveProductImg(prev => ({ ...prev, [i]: p.mainImg }))}>
-                          <img src={p.mainImg} alt="" loading="lazy" />
-                        </div>
-                        {p.thumbs.map((t, j) => (
-                          <div key={j} className="product-thumb" onClick={() => setActiveProductImg(prev => ({ ...prev, [i]: t }))}>
-                            <img src={t} alt="" loading="lazy" />
-                          </div>
-                        ))}
-                      </div>
+            <div className="products-main" style={{padding: "48px 64px 80px"}}>
+              <div className="products-main-header">
+                <div className="products-main-title">Our Products</div>
+                <div className="products-main-sub">100% natural, chemical-free dehydrated produce — export grade, every batch.</div>
+              </div>
+              <div className="products-grid">
+                {PRODUCTS.map((p, i) => (
+                  <div className="product-card" key={i}>
+                    <div className="product-card-img-wrap">
+                      <img src={p.mainImg} alt={p.name} className="product-card-img" loading="lazy" onError={e => e.target.style.display='none'} />
                     </div>
-                    <div className="product-row-info">
-                      <div className="product-row-header">
-                        <div className="product-row-name">{p.name}</div>
-                        <span className="product-row-badge">Dehydrated</span>
-                      </div>
-                      <div className="product-row-desc">{p.desc}</div>
-                      <div>
-                        <div className="product-forms-label">Available As</div>
-                        <div className="product-row-forms">
-                          {p.forms.map((f, j) => <span className="product-form-tag" key={j}>{f}</span>)}
-                        </div>
-                      </div>
-                      <div className="product-specs">
-                        <div className="product-specs-title">Specifications</div>
-                        <div className="specs-table">
-                          {Object.entries(p.specs).map(([k, v], j) => (
-                            <div className="spec-row" key={j}>
-                              <span className="spec-key">{k}</span>
-                              <span className="spec-val">{v}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <button className="product-quote-btn" onClick={() => goToContact(p.name)}>Request a Quote →</button>
+                    <div className="product-card-name">{p.name}</div>
+                    <div className="product-card-forms">
+                      {p.forms.map((f, j) => <span className="product-card-form" key={j}>{f}</span>)}
                     </div>
+                    <button className="product-card-btn" onClick={() => goToContact(p.name)}>Request a Quote</button>
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
             <div className="products-cta-strip">
               <p style={{ color: "rgba(245,240,232,0.7)", fontSize: 15, marginBottom: 20 }}>
