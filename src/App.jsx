@@ -306,33 +306,103 @@ const style = `
   .lightbox-close:hover { background: rgba(255,255,255,0.22); }
   .lightbox-caption { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); background: rgba(15,30,17,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 8px 20px; color: rgba(245,240,232,0.85); font-size: 14px; white-space: nowrap; }
 
-  @media (max-width: 900px) {
+  /* MOBILE NAV HAMBURGER */
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(26,58,31,0.98); backdrop-filter: blur(12px); z-index: 99; flex-direction: column; padding: 12px 0 20px; border-bottom: 1px solid rgba(74,158,85,0.25); animation: fadeSlideUp 0.25s both; }
+  .mobile-menu.open { display: flex; }
+  .mobile-nav-tab { padding: 14px 28px; border: none; background: transparent; color: rgba(245,240,232,0.8); font-family: 'DM Sans', sans-serif; font-size: 16px; letter-spacing: 0.5px; cursor: pointer; text-align: left; transition: all 0.2s; }
+  .mobile-nav-tab:hover, .mobile-nav-tab.active { color: var(--amber-light); background: rgba(196,135,58,0.1); }
+
+  @media (max-width: 768px) {
+    .nav-tabs { display: none; }
+    .nav-hamburger { display: flex; }
     nav { padding: 0 20px; }
-    .nav-tabs { gap: 2px; }
-    .nav-tab { padding: 6px 10px; font-size: 12px; }
-    .hero-content { padding: 0 28px; }
-    .story-grid, .contact-page, .home-enquiry-inner, .farm-video-inner { grid-template-columns: 1fr; gap: 40px; }
-    .story-section, .process-steps, .contact-left, .contact-right, .cert-strip, .values-strip, .home-enquiry, .farm-gallery-inner, .farm-video-section { padding: 48px 24px; }
-    .products-hero, .process-hero, .quality-hero { padding: 60px 24px 40px; }
+    .logo-main { font-size: 14px; }
+    .logo-sub { font-size: 8px; }
+    nav img { width: 36px !important; height: 36px !important; }
+
+    .hero-content { padding: 0 24px; }
+    .story-grid, .contact-page, .home-enquiry-inner, .farm-video-inner { grid-template-columns: 1fr; gap: 32px; }
+    .story-section { padding: 48px 20px; }
+    .process-steps, .contact-left, .contact-right, .cert-strip, .home-enquiry { padding: 40px 20px; }
+    .values-strip { flex-direction: column; padding: 48px 24px; gap: 32px; }
+    .value-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0 0 32px; }
+    .value-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .farm-gallery-inner { padding: 0 16px; }
+    .farm-gallery-section { padding: 0 0 48px; }
+    .farm-video-section { padding: 40px 20px; }
+    .products-hero, .process-hero, .quality-hero { padding: 48px 20px 32px; }
     .form-row { grid-template-columns: 1fr; }
-    footer { padding: 40px 24px 20px; }
+    footer { padding: 36px 20px 20px; }
     .footer-top { flex-direction: column; gap: 16px; text-align: center; }
-    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
-    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .products-main { padding: 24px; }
-    .home-enquiry-form { padding: 24px; }
-    .quality-timeline::before { left: 30px; }
-    .qt-item { grid-template-columns: 30px 1fr; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+    /* Products — single column, full width card, image not cut */
+    .products-grid { grid-template-columns: 1fr; gap: 16px; max-width: 100%; margin: 0; }
+    .products-main { padding: 24px 16px 60px; }
+    .product-card { flex-direction: row; align-items: center; padding: 20px 16px; text-align: left; gap: 16px; }
+    .product-card-img-wrap { width: 100px; height: 100px; flex-shrink: 0; margin-bottom: 0; }
+    .product-card-name { font-size: 16px; margin-bottom: 6px; }
+    .product-card-forms { justify-content: flex-start; margin-bottom: 12px; }
+    .product-card-btn { width: auto; }
+
+    .home-enquiry-form { padding: 24px 20px; }
+    .quality-timeline { padding: 48px 20px; }
+    .quality-timeline::before { left: 20px; }
+    .qt-item { grid-template-columns: 24px 1fr; gap: 12px; margin-bottom: 36px; }
     .qt-empty { display: none; }
     .qt-dot-wrap { grid-column: 1; justify-content: flex-start; }
+    .qt-dot { width: 36px; height: 36px; font-size: 16px; }
     .qt-content { grid-column: 2; }
-    .farm-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; }
+    .cert-strip { padding: 40px 20px; gap: 16px; }
+
+    /* Farm gallery — uniform 2-col grid, captions always visible */
+    .farm-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px 200px; gap: 8px; }
     .mosaic-item:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
     .mosaic-item:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
     .mosaic-item:nth-child(3) { grid-column: 1 / 2; grid-row: 2 / 3; }
     .mosaic-item:nth-child(4) { grid-column: 2 / 3; grid-row: 2 / 3; }
     .mosaic-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3 / 4; }
-    .farm-gallery-inner { padding: 0 24px; }
+    .mosaic-overlay { opacity: 1; }
+    .mosaic-caption { opacity: 1; transform: translateY(0); padding: 10px 12px; }
+    .mosaic-tag { font-size: 9px; padding: 2px 8px; }
+    .mosaic-cap-text { font-size: 11px; }
+
+    .process-steps { padding: 40px 20px; }
+    .process-step { grid-template-columns: 52px 1fr; gap: 16px; padding: 28px 0; }
+    .step-num { width: 48px; height: 48px; font-size: 20px; }
+    .step-title { font-size: 18px; }
+
+    .products-cta-strip { padding: 40px 20px; }
+    .whatsapp-float { bottom: 16px; right: 16px; width: 48px; height: 48px; }
+  }
+
+  @media (min-width: 769px) and (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-tabs { display: none; }
+    .nav-hamburger { display: flex; }
+    .story-grid, .contact-page, .home-enquiry-inner, .farm-video-inner { grid-template-columns: 1fr; gap: 40px; }
+    .story-section, .process-steps, .contact-left, .contact-right, .cert-strip, .values-strip, .home-enquiry, .farm-video-section { padding: 48px 32px; }
+    .farm-gallery-inner { padding: 0 32px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 40px 32px 20px; }
+    .footer-top { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .products-main { padding: 32px; }
+    .home-enquiry-form { padding: 28px; }
+    .quality-timeline::before { left: 30px; }
+    .qt-item { grid-template-columns: 30px 1fr; }
+    .qt-empty { display: none; }
+    .qt-dot-wrap { grid-column: 1; justify-content: flex-start; }
+    .qt-content { grid-column: 2; }
+    .farm-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
+    .mosaic-item:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(3) { grid-column: 1 / 2; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(4) { grid-column: 2 / 3; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3 / 4; }
   }
 `;
 
@@ -394,6 +464,7 @@ export default function App() {
   const [submitted, setSubmitted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSubmit = () => {
     if (formData.name && formData.email) {
@@ -424,7 +495,7 @@ export default function App() {
       <div className="site-wrapper">
 
         <nav>
-          <div className="nav-logo" onClick={() => setActiveTab("story")}>
+          <div className="nav-logo" onClick={() => { setActiveTab("story"); setMenuOpen(false); }}>
             <img src={LOGO_IMG} alt="MNTP Logo" style={{width: 44, height: 44, objectFit: "contain", flexShrink: 0}} />
             <div className="logo-text">
               <span className="logo-main">MNTP <span>FARM FRESH</span></span>
@@ -437,7 +508,18 @@ export default function App() {
                 onClick={() => setActiveTab(t.id)}>{t.label}</button>
             ))}
           </div>
+          <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+            <span style={{transform: menuOpen ? "rotate(45deg) translate(5px,5px)" : "none"}} />
+            <span style={{opacity: menuOpen ? 0 : 1}} />
+            <span style={{transform: menuOpen ? "rotate(-45deg) translate(5px,-5px)" : "none"}} />
+          </button>
         </nav>
+        <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+          {tabs.map(t => (
+            <button key={t.id} className={`mobile-nav-tab ${activeTab === t.id ? "active" : ""}`}
+              onClick={() => { setActiveTab(t.id); setMenuOpen(false); }}>{t.label}</button>
+          ))}
+        </div>
 
         {activeTab === "story" && (
           <div className="page" key="story">
@@ -559,7 +641,7 @@ export default function App() {
                   <div style={{ marginTop: 32 }}>
                     {[
                       { icon: "📍", title: "Address", val: "G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
-                      { icon: "📞", title: "Phone", val: "+91 942359150" },
+                      { icon: "📞", title: "Phone", val: "+91 9423591545" },
                       { icon: "✉️", title: "Email", val: "contact@mntpfamfresh.com" },
                     ].map((item, i) => (
                       <div className="home-contact-item" key={i}>
@@ -682,7 +764,7 @@ export default function App() {
                     onMouseLeave={e => e.target.style.background="var(--green-deep)"}>
                     🌿 Request a Quote
                   </button>
-                  <a href="https://wa.me/91942359150" target="_blank" rel="noopener noreferrer" style={{display:"flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"13px 24px", borderRadius:10, fontSize:14, fontWeight:500, textDecoration:"none", whiteSpace:"nowrap"}}>
+                  <a href="https://wa.me/919423591545" target="_blank" rel="noopener noreferrer" style={{display:"flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"13px 24px", borderRadius:10, fontSize:14, fontWeight:500, textDecoration:"none", whiteSpace:"nowrap"}}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.525 5.847L.057 23.982l6.31-1.653A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.812 9.812 0 01-5.018-1.382l-.36-.214-3.736.979 1-3.635-.234-.374A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
                     WhatsApp Us
                   </a>
@@ -772,7 +854,7 @@ export default function App() {
                 <div className="contact-info">
                   {[
                     { icon: "📍", title: "Address", val: "G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
-                    { icon: "📞", title: "Phone", val: "+91 942359150" },
+                    { icon: "📞", title: "Phone", val: "+91 9423591545" },
                     { icon: "✉️", title: "Email", val: "contact@mntpfamfresh.com" },
                     { icon: "🕐", title: "Working Hours", val: "Mon – Sat, 9:00 AM – 6:30 PM IST" },
                   ].map((item, i) => (
@@ -805,7 +887,7 @@ export default function App() {
         </div>
       )}
 
-      <a className="whatsapp-float" href="https://wa.me/91942359150" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <a className="whatsapp-float" href="https://wa.me/919423591545" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
         <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
           <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.525 5.847L.057 23.982l6.31-1.653A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.812 9.812 0 01-5.018-1.382l-.36-.214-3.736.979 1-3.635-.234-.374A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
