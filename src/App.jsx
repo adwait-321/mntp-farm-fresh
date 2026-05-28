@@ -13,46 +13,46 @@ const PRODUCT_IMGS = {
 
 const PRODUCTS = [
   {
-    name: "Dehydrated Coriander",
-    desc: "Bright-green dried coriander leaves preserving natural oils and flavour. Perfect for seasoning, spice blends, and ready-meal manufacturing.",
-    forms: ["Leaves", "Seeds", "Powder", "Crushed"],
-    mainImg: PRODUCT_IMGS.coriander,
-    specs: { "Moisture": "≤8%", "Colour": "Bright Green", "Volatile Oil": "Retained", "Shelf Life": "18 months", "Packaging": "5kg / 20kg bags", "Origin": "Maharashtra / Rajasthan" }
-  },
-  {
     name: "Dehydrated Green Chilli",
-    desc: "Green chilli varieties dried to retain colour and heat levels. Available in whole, crushed, and powder form — ideal for export spice blends.",
-    forms: ["Whole", "Crushed", "Powder", "Flakes"],
+    desc: "Sun-dried green chilli retaining natural heat and colour. Used in sauces, seasonings, ready meals, and spice blends. Available in flakes, powder, and slices.",
+    forms: ["Flakes", "Powder", "Slices"],
     mainImg: PRODUCT_IMGS.chilli,
-    specs: { "Moisture": "≤7%", "Colour": "Green", "Heat Level": "Medium to High", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra / AP" }
-  },
-  {
-    name: "Dehydrated Ginger",
-    desc: "Carefully sliced and dried ginger root retaining essential oils. Widely used in beverages, spice mixes, health products, and export food processing.",
-    forms: ["Sliced", "Powder", "Granules", "Splits"],
-    mainImg: PRODUCT_IMGS.ginger,
-    specs: { "Moisture": "≤10%", "Colour": "Light Tan", "Gingerol": "Retained", "Shelf Life": "24 months", "Packaging": "10kg / 25kg bags", "Origin": "Kerala / Maharashtra" }
-  },
-  {
-    name: "Dehydrated Spring Onion",
-    desc: "Freshly harvested spring onions dehydrated to lock in their mild, sweet flavour and vibrant green colour. Ideal for instant noodles, soups, and seasoning blends.",
-    forms: ["Flakes", "Chopped", "Powder"],
-    mainImg: PRODUCT_IMGS.springonion,
-    specs: { "Moisture": "≤6%", "Colour": "Green to White", "Flavour": "Mild & Sweet", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra" }
+    specs: { "Moisture": "6–8%", "Colour": "Natural green to olive green", "Cut Form": "Flakes / Powder / Slices", "Application": "Sauces, seasonings, ready meals", "Packaging": "LDPE liner + Carton", "Origin": "Maharashtra / AP" }
   },
   {
     name: "Dehydrated Carrot",
-    desc: "Bright orange carrot slices and powder with retained beta-carotene and natural sweetness. Widely used in soups, baby food, and health products.",
-    forms: ["Flakes", "Powder", "Diced", "Granules"],
+    desc: "Bright orange carrot with retained beta-carotene and natural sweetness. Widely used in beverages, desserts, flavouring, and health powders.",
+    forms: ["Flakes", "Powder", "Slices"],
     mainImg: PRODUCT_IMGS.carrot,
-    specs: { "Moisture": "≤7%", "Colour": "Bright Orange", "Beta-Carotene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 25kg bags", "Origin": "Maharashtra / Rajasthan" }
+    specs: { "Moisture": "<5%", "Colour": "Bright orange", "Cut Form": "Flakes / Powder / Slices", "Application": "Beverages, desserts, flavoring", "Packaging": "Poly bag + Carton", "Origin": "Maharashtra / Rajasthan" }
   },
   {
-    name: "Dehydrated Tomato",
-    desc: "Sun-dried and tunnel-dried tomatoes with rich colour and concentrated flavour. Available in flakes, powder, and sun-dried form for sauces, seasonings, and snacks.",
-    forms: ["Flakes", "Powder", "Sun-Dried"],
-    mainImg: PRODUCT_IMGS.tomato,
-    specs: { "Moisture": "≤7%", "Colour": "Deep Red", "Lycopene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra / Karnataka" }
+    name: "Dehydrated Cabbage",
+    desc: "Crisp dehydrated cabbage ideal for soups, instant noodles, and dehydrated meal mixes. Maintains light colour and mild flavour after rehydration.",
+    forms: ["Flakes", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Creamy white to light green", "Cut Form": "Flakes / Slices", "Application": "Soups, instant noodles, dehydrated mixes", "Packaging": "Kraft + Liner", "Origin": "Maharashtra" }
+  },
+  {
+    name: "Dehydrated Spinach",
+    desc: "Rich green spinach flakes and powder retaining chlorophyll and nutrients. Ideal for nutraceuticals, health powders, and fortified food blends.",
+    forms: ["Flakes", "Powder"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Rich green", "Cut Form": "Flakes / Powder", "Application": "Nutraceuticals, powders, health blends", "Packaging": "Vacuum Packing Optional", "Origin": "Maharashtra" }
+  },
+  {
+    name: "Dehydrated Banana",
+    desc: "Creamy banana powder and slices made from ripe bananas. Perfect for baby food, bakery products, smoothies, and nutritional powders.",
+    forms: ["Powder", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Cream to light yellow", "Cut Form": "Powder / Slices", "Application": "Baby food, bakery, smoothies", "Packaging": "Poly Bag + Carton", "Origin": "Maharashtra / Karnataka" }
+  },
+  {
+    name: "Dehydrated Mango",
+    desc: "Golden mango powder and slices with concentrated tropical flavour. Used in beverages, desserts, flavouring, and export food manufacturing.",
+    forms: ["Powder", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Yellow to golden yellow", "Cut Form": "Powder / Slices", "Application": "Beverages, desserts, flavoring", "Packaging": "Poly Bag + Carton", "Origin": "Maharashtra / Konkan" }
   },
 ];
 
@@ -66,13 +66,72 @@ const QUALITY_STEPS = [
 ];
 
 const PROCESS_STEPS = [
-  { tag: "Stage 01", title: "Sourcing & Procurement", desc: "We source directly from contract farmers and select wholesale markets in Solapur, Nashik, and Kolhapur. Seasonality is managed through cold-store inventory to ensure year-round supply.", details: ["Direct Farmer Tie-ups", "Seasonal Planning", "Variety Selection", "Cold Storage Buffer"] },
-  { tag: "Stage 02", title: "Sorting & Grading", desc: "Received produce is sorted by size, colour, and quality grade. Damaged or substandard pieces are separated on conveyor inspection tables before any processing begins.", details: ["Manual Inspection", "Size Grading", "Colour Sorting", "Reject Removal"] },
-  { tag: "Stage 03", title: "Washing & Cleaning", desc: "Multiple-stage washing using food-grade water removes field dust, surface contaminants, and pesticide residues. Produce is sanitised with approved food-safe solutions.", details: ["Multi-Stage Wash", "Sanitisation", "Water Recirculation", "Surface Drying"] },
-  { tag: "Stage 04", title: "Cutting & Slicing", desc: "Depending on the final product specification — flakes, slices, or minced — stainless steel cutters process the cleaned material to uniform dimensions for consistent drying.", details: ["Uniform Cut Size", "SS Equipment", "Custom Specification", "Mincing / Slicing / Flaking"] },
-  { tag: "Stage 05", title: "Dehydration", desc: "Tunnel dehydrators operate at controlled temperatures (50–70°C) with calibrated airflow across multiple passes. Total drying time varies by product — typically 8 to 14 hours — until target moisture of ≤5% is achieved.", details: ["Tunnel Dryers", "50–70°C Range", "Airflow Calibration", "≤5% Moisture Target"] },
-  { tag: "Stage 06", title: "Post-Drying Processing", desc: "Dried product is milled, screened, or blended depending on final form (powder, granule, flake). Screens ensure uniform particle size before batch approval.", details: ["Milling", "Sieving", "Blending", "Particle Sizing"] },
-  { tag: "Stage 07", title: "Quality Testing & Packing", desc: "Each approved batch is weighed, tested, and packed in food-grade packaging. Batch codes, production date, expiry, and export documentation are generated at this stage.", details: ["Batch Testing", "Food-grade Packs", "Export Labelling", "Documentation"] },
+  {
+    tag: "Raw Material", title: "Raw Material Reception", ccp: null, ccpNum: null,
+    desc: "Fresh produce is received directly from our contract farms and verified supplier network. Each incoming batch is weighed, tagged with farm origin, and held for pre-processing inspection before entering the facility.",
+    details: ["Farm-Level Traceability", "Batch Tagging", "Weight & Volume Check", "Origin Documentation"],
+    color: "#2d6a35"
+  },
+  {
+    tag: "CCP 1", title: "Sorting & Grading", ccp: "Foreign Material Removal", ccpNum: 1,
+    desc: "Produce is manually and mechanically sorted by size, colour, and quality. Foreign materials, damaged pieces, and substandard units are removed at this critical control point before any further processing.",
+    details: ["Foreign Material Removal", "Size Grading", "Colour Sorting", "Conveyor Inspection"],
+    color: "#b85450"
+  },
+  {
+    tag: "Processing", title: "Cutting / Size Reduction", ccp: null, ccpNum: null,
+    desc: "Sorted produce is cut to uniform dimensions using stainless steel cutters. Cut form — flakes, slices, or powder — is set per customer specification to ensure consistent drying and final appearance.",
+    details: ["Uniform Cut Size", "SS Equipment", "Flakes / Slices / Minced", "Custom Specification"],
+    color: "#d4a017"
+  },
+  {
+    tag: "CCP 2", title: "Bubble Washing", ccp: "Surface Contaminant Removal", ccpNum: 2,
+    desc: "Cut produce passes through a multi-stage bubble wash system using food-grade water. High-pressure bubbling action removes surface dust, soil, and residual contaminants from all surfaces.",
+    details: ["Bubble Wash System", "Multi-Stage Rinse", "Food-Grade Water", "Surface Contaminant Removal"],
+    color: "#b85450"
+  },
+  {
+    tag: "CCP 3", title: "Ozone Treatment", ccp: "Microbial & Pesticide Load Reduction", ccpNum: 3,
+    desc: "Washed produce is treated with controlled ozone dosing to reduce microbial load and residual pesticide concentration. This chemical-free treatment is a key differentiator in our food safety protocol.",
+    details: ["Ozonization System", "Microbial Reduction", "Pesticide Load Reduction", "Chemical-Free Treatment"],
+    color: "#b85450"
+  },
+  {
+    tag: "CCP 4", title: "Blanching", ccp: "Microbial & Enzyme Control", ccpNum: 4,
+    desc: "Produce undergoes controlled heat blanching to inactivate enzymes that cause colour and flavour degradation, and to achieve further reduction of microbial count before the drying stage.",
+    details: ["Heat Blanching", "Enzyme Inactivation", "Colour Preservation", "Microbial Control"],
+    color: "#d4a017"
+  },
+  {
+    tag: "Drying", title: "Solar Drying", ccp: null, ccpNum: null,
+    desc: "Pre-processed produce enters our solar drying system for initial moisture reduction. This energy-efficient first stage reduces bulk moisture before controlled mechanical drying begins.",
+    details: ["Solar Dryer", "Initial Moisture Reduction", "Energy Efficient", "Natural Process"],
+    color: "#4a9e55"
+  },
+  {
+    tag: "Drying", title: "Heat Pump Drying", ccp: null, ccpNum: null,
+    desc: "The heat pump dryer performs controlled dehydration at consistent temperatures, preserving colour, aroma, and nutritional content. This stage handles the bulk of moisture reduction.",
+    details: ["Heat Pump System", "Controlled Dehydration", "Colour Retention", "Aroma Preservation"],
+    color: "#4a9e55"
+  },
+  {
+    tag: "CCP 5", title: "Electric Drying", ccp: "Final Moisture Adjustment", ccpNum: 5,
+    desc: "The electric dryer provides precise final moisture adjustment to meet exact product specifications (typically ≤5–8%). This critical control point ensures every batch meets the target moisture level before packing.",
+    details: ["Electric Dryer", "Final Moisture Adjustment", "≤5–8% Target", "Precision Control"],
+    color: "#b85450"
+  },
+  {
+    tag: "CCP 6", title: "Packaging", ccp: "Hygiene & Contamination Control", ccpNum: 6,
+    desc: "Approved product is packed in our PUF panel-based, temperature-controlled, dust-free packaging area. Food-grade packaging (LDPE, poly bags, Kraft+liner, vacuum packs) is applied with full batch documentation and export labelling.",
+    details: ["Dust-Free Packing Area", "Food-Grade Packaging", "Batch Documentation", "Export Labelling"],
+    color: "#7b5ea7"
+  },
+  {
+    tag: "Cold Storage", title: "Cold Storage", ccp: null, ccpNum: null,
+    desc: "Finished goods are stored under controlled cold storage conditions to ensure product stability and maintain shelf life of 12–24 months. Inventory is managed on a FIFO basis with full traceability.",
+    details: ["Temperature Controlled", "FIFO Management", "12–24 Month Shelf Life", "Finished Goods Stability"],
+    color: "#5ba4a4"
+  },
 ];
 
 // Farm photos — only relevant ones (no black image DSC_4926)
@@ -376,6 +435,15 @@ const style = `
     .process-step { grid-template-columns: 52px 1fr; gap: 16px; padding: 28px 0; }
     .step-num { width: 48px; height: 48px; font-size: 20px; }
     .step-title { font-size: 18px; }
+    .process-hero { padding: 48px 20px 32px; }
+    .facility-grid { grid-template-columns: 1fr !important; }
+    .plant-stats-grid { grid-template-columns: 1fr !important; }
+    .process-banner { padding: 20px 16px !important; flex-direction: column !important; gap: 16px !important; }
+    .process-banner > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0 0 16px !important; }
+    .process-banner > div:last-child { border-bottom: none; padding-bottom: 0 !important; }
+    .facility-section { padding: 40px 16px !important; }
+    .ccp-legend { padding: 32px 16px 0 !important; }
+    .process-flow { padding: 24px 16px 60px !important; }
 
     .products-cta-strip { padding: 40px 20px; }
     .whatsapp-float { bottom: 16px; right: 16px; width: 48px; height: 48px; }
@@ -885,27 +953,156 @@ export default function App() {
 
         {activeTab === "process" && (
           <div className="page" key="process">
+            {/* Hero */}
             <div className="process-hero">
               <div className="section-label">How We Work</div>
-              <h2 className="section-title">The Dehydration Process</h2>
+              <h2 className="section-title">Process Flow & Critical Control Points</h2>
               <p className="section-body">
-                A 7-stage journey that transforms fresh farm produce into shelf-stable, export-grade dehydrated products — without additives or preservatives.
+                An 11-stage HACCP-aligned process that transforms fresh farm produce into export-grade dehydrated ingredients — with 6 Critical Control Points ensuring food safety at every step.
               </p>
             </div>
-            <div className="process-steps">
-              {PROCESS_STEPS.map((s, i) => (
-                <div className="process-step" key={i}>
-                  <div><div className="step-num">{i + 1}</div></div>
-                  <div>
-                    <span className="step-tag">{s.tag}</span>
-                    <div className="step-title">{s.title}</div>
-                    <div className="step-desc">{s.desc}</div>
-                    <div className="step-details">
-                      {s.details.map((d, j) => <span className="step-detail" key={j}>{d}</span>)}
+
+            {/* Plant stats banner */}
+            <div className="process-banner" style={{background:"var(--amber)", padding:"28px 80px", display:"flex", gap:0, justifyContent:"center", flexWrap:"wrap"}}>
+              {[
+                { val: "1.6 MT/day", label: "Dehydration Capacity" },
+                { val: "Ozonization + Blanching", label: "Microbial Control System" },
+                { val: "Heat Pump + Electric + Solar", label: "Drying System" },
+              ].map((s, i) => (
+                <div key={i} style={{flex:1, minWidth:200, textAlign:"center", padding:"0 24px", borderRight: i < 2 ? "1px solid rgba(255,255,255,0.3)" : "none"}}>
+                  <div style={{fontFamily:"'Playfair Display', serif", fontSize:20, fontWeight:700, color:"white", marginBottom:4}}>{s.val}</div>
+                  <div style={{fontSize:12, letterSpacing:1, textTransform:"uppercase", color:"rgba(255,255,255,0.8)"}}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Facility images from PDF */}
+            <div className="facility-section" style={{background:"var(--cream)", padding:"64px 80px"}}>
+              <div style={{maxWidth:1100, margin:"0 auto"}}>
+                <div className="section-label">Our Facility</div>
+                <h3 className="section-title" style={{marginBottom:8}}>Salient Features</h3>
+                <p style={{fontSize:15, color:"var(--text-mid)", marginBottom:32, lineHeight:1.7}}>MNTP FarmFresh Pvt. Ltd. is a dehydrated food ingredient manufacturer built on an integrated farm-to-processing model. We deliver consistent, export-grade products with controlled processing, scalable capacity, and specification-driven supply.</p>
+
+                {/* Aerial plant photo */}
+                <div style={{borderRadius:14, overflow:"hidden", boxShadow:"0 8px 32px rgba(26,58,31,0.15)", marginBottom:24, position:"relative"}}>
+                  <img src="https://i.ibb.co/FLMf8Ybv/Screenshot-2026-05-28-164049.png" alt="MNTP FarmFresh plant aerial view"
+                    style={{width:"100%", height:300, objectFit:"cover", display:"block"}} />
+                  <div style={{position:"absolute", inset:0, background:"linear-gradient(to top, rgba(15,30,17,0.6) 0%, transparent 50%)"}} />
+                  <div style={{position:"absolute", bottom:20, left:24}}>
+                    <span style={{background:"rgba(196,135,58,0.9)", color:"white", fontSize:11, padding:"5px 16px", borderRadius:100, letterSpacing:1, textTransform:"uppercase"}}>Our Plant · Chincholi MIDC, Solapur</span>
+                  </div>
+                </div>
+                <div className="facility-grid" style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:24}}>
+                  <div style={{borderRadius:14, overflow:"hidden", boxShadow:"0 8px 32px rgba(26,58,31,0.12)"}}>
+                    <img src="https://i.ibb.co/r25TdfrP/Screenshot-2026-05-28-164102.png" alt="Processing line"
+                      style={{width:"100%", height:240, objectFit:"cover", display:"block"}} />
+                    <div style={{padding:"16px 20px", background:"white"}}>
+                      <div style={{fontSize:13, fontWeight:600, color:"var(--green-deep)", marginBottom:4}}>Sorting, Cutting & Washing Line</div>
+                      <div style={{fontSize:12, color:"var(--text-mid)", lineHeight:1.6}}>Equipped with sorting, cutting, washing, blanching and handling systems ensuring pesticide free, heavy metal free and dust free finished product.</div>
+                    </div>
+                  </div>
+                  <div style={{borderRadius:14, overflow:"hidden", boxShadow:"0 8px 32px rgba(26,58,31,0.12)"}}>
+                    <img src="https://i.ibb.co/Y4xFpjyt/Screenshot-2026-05-28-164119.png" alt="PUF panel processing area"
+                      style={{width:"100%", height:240, objectFit:"cover", display:"block"}} />
+                    <div style={{padding:"16px 20px", background:"white"}}>
+                      <div style={{fontSize:13, fontWeight:600, color:"var(--green-deep)", marginBottom:4}}>PUF Panel Processing Area</div>
+                      <div style={{fontSize:12, color:"var(--text-mid)", lineHeight:1.6}}>Temperature-controlled, dust-free processing area built with PUF panel construction for hygienic food manufacturing environments.</div>
                     </div>
                   </div>
                 </div>
-              ))}
+
+                {/* Plant stats */}
+                <div className="plant-stats-grid" style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:16, marginTop:24}}>
+                  {[
+                    { icon:"⚙️", val:"1.6 MT/day", label:"Dehydration Capacity" },
+                    { icon:"🧪", val:"Ozonization + Blanching", label:"Microbial Control System" },
+                    { icon:"☀️", val:"Heat Pump + Electric + Solar", label:"Drying Systems" },
+                  ].map((s,i) => (
+                    <div key={i} style={{background:"white", borderRadius:12, padding:"20px 16px", textAlign:"center", border:"1px solid var(--cream-dark)", boxShadow:"0 2px 8px rgba(26,58,31,0.06)"}}>
+                      <div style={{fontSize:28, marginBottom:8}}>{s.icon}</div>
+                      <div style={{fontFamily:"'Playfair Display', serif", fontSize:15, fontWeight:700, color:"var(--green-deep)", marginBottom:4}}>{s.val}</div>
+                      <div style={{fontSize:11, color:"var(--text-mid)", letterSpacing:0.5, textTransform:"uppercase"}}>{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* CCP Legend */}
+            <div className="ccp-legend" style={{background:"var(--white)", padding:"48px 80px 0"}}>
+              <div style={{maxWidth:900, margin:"0 auto"}}>
+                <div className="section-label" style={{textAlign:"center", marginBottom:16}}>Colour Legend</div>
+                <div style={{display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap", marginBottom:8}}>
+                  {[
+                    { color:"#2d6a35", label:"Raw Material" },
+                    { color:"#b85450", label:"Critical Control Point (CCP)" },
+                    { color:"#d4a017", label:"Post Harvest Processing" },
+                    { color:"#4a9e55", label:"Drying / Processing" },
+                    { color:"#7b5ea7", label:"Packaging" },
+                    { color:"#5ba4a4", label:"Cold Storage" },
+                  ].map((l, i) => (
+                    <div key={i} style={{display:"flex", alignItems:"center", gap:8}}>
+                      <div style={{width:14, height:14, borderRadius:3, background:l.color, flexShrink:0}} />
+                      <span style={{fontSize:12, color:"var(--text-mid)"}}>{l.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Process flow steps */}
+            <div className="process-flow" style={{background:"var(--white)", padding:"32px 80px 80px"}}>
+              <div style={{maxWidth:900, margin:"0 auto", display:"flex", flexDirection:"column", alignItems:"center", gap:0}}>
+                {PROCESS_STEPS.map((s, i) => (
+                  <div key={i} style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    {/* Step box */}
+                    <div style={{
+                      width:"100%", maxWidth:620,
+                      background:s.color, borderRadius:12,
+                      padding:"18px 24px", position:"relative",
+                      boxShadow:"0 4px 16px rgba(0,0,0,0.12)",
+                      transition:"transform 0.2s",
+                    }}>
+                      <div style={{display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:12}}>
+                        <div style={{flex:1}}>
+                          {s.ccpNum && (
+                            <div style={{display:"inline-flex", alignItems:"center", gap:6, background:"rgba(0,0,0,0.2)", borderRadius:100, padding:"2px 10px", marginBottom:8}}>
+                              <span style={{fontSize:10, fontWeight:700, color:"rgba(255,255,255,0.95)", letterSpacing:1.5, textTransform:"uppercase"}}>CCP {s.ccpNum}</span>
+                            </div>
+                          )}
+                          <div style={{fontSize:16, fontWeight:700, color:"white", marginBottom: s.ccp ? 4 : 0, fontFamily:"'Playfair Display', serif"}}>{s.title}</div>
+                          {s.ccp && <div style={{fontSize:12, color:"rgba(255,255,255,0.8)", fontStyle:"italic"}}>{s.ccp}</div>}
+                        </div>
+                        <div style={{background:"rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 12px", flexShrink:0}}>
+                          <div style={{fontSize:10, color:"rgba(255,255,255,0.7)", letterSpacing:1, textTransform:"uppercase"}}>{s.tag}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Expandable detail — shown below each box */}
+                    <div style={{
+                      width:"100%", maxWidth:580, background:"var(--cream)",
+                      borderRadius:"0 0 10px 10px", padding:"14px 20px",
+                      borderLeft:`3px solid ${s.color}`, marginBottom:0,
+                    }}>
+                      <p style={{fontSize:13, color:"var(--text-mid)", lineHeight:1.7, marginBottom:10}}>{s.desc}</p>
+                      <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
+                        {s.details.map((d, j) => (
+                          <span key={j} style={{background:"white", border:"1px solid var(--cream-dark)", color:"var(--green-mid)", fontSize:11, padding:"3px 10px", borderRadius:100}}>{d}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Arrow connector (not after last) */}
+                    {i < PROCESS_STEPS.length - 1 && (
+                      <div style={{display:"flex", flexDirection:"column", alignItems:"center", margin:"4px 0"}}>
+                        <div style={{width:2, height:20, background:"var(--cream-dark)"}} />
+                        <div style={{width:0, height:0, borderLeft:"8px solid transparent", borderRight:"8px solid transparent", borderTop:`10px solid var(--cream-dark)`}} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
