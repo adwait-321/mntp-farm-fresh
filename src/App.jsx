@@ -986,7 +986,7 @@ export default function App() {
                 {/* Aerial plant photo */}
                 <div style={{borderRadius:14, overflow:"hidden", boxShadow:"0 8px 32px rgba(26,58,31,0.15)", marginBottom:24, position:"relative"}}>
                   <img src="https://i.ibb.co/FLMf8Ybv/Screenshot-2026-05-28-164049.png" alt="MNTP FarmFresh plant aerial view"
-                    style={{width:"100%", height:300, objectFit:"cover", display:"block"}} />
+                    style={{width:"100%", height:"auto", display:"block"}} />
                   <div style={{position:"absolute", inset:0, background:"linear-gradient(to top, rgba(15,30,17,0.6) 0%, transparent 50%)"}} />
                   <div style={{position:"absolute", bottom:20, left:24}}>
                     <span style={{background:"rgba(196,135,58,0.9)", color:"white", fontSize:11, padding:"5px 16px", borderRadius:100, letterSpacing:1, textTransform:"uppercase"}}>Our Plant · Chincholi MIDC, Solapur</span>
