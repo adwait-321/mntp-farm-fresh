@@ -1,80 +1,202 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
+// ─── SEO Component ────────────────────────────────────────────────────────────
+const SITE_NAME = "MNTP Farm Fresh";
+const SITE_URL  = "https://www.mntpfarmfresh.com";
+
+function SEO({ title, description, path = "", schema = null }) {
+  const fullTitle = title
+    ? `${title} | ${SITE_NAME}`
+    : `${SITE_NAME} — Dehydrated Fruits & Vegetables Manufacturer, Solapur`;
+  const fullUrl = `${SITE_URL}${path}`;
+  const ogImage = `${SITE_URL}/og-image.jpg`;
+  const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+  return (
+    <Helmet>
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={fullUrl} />
+      <meta property="og:type"        content="website" />
+      <meta property="og:site_name"   content={SITE_NAME} />
+      <meta property="og:title"       content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url"         content={fullUrl} />
+      <meta property="og:image"       content={ogImage} />
+      <meta property="og:image:width"  content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card"        content="summary_large_image" />
+      <meta name="twitter:title"       content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image"       content={ogImage} />
+      {schemas.map((s, i) => (
+        <script key={i} type="application/ld+json">{JSON.stringify(s)}</script>
+      ))}
+    </Helmet>
+  );
+}
+
+// ─── JSON-LD Schemas ──────────────────────────────────────────────────────────
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "MNTP Farm Fresh",
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
+  description: "MNTP Farm Fresh is a dehydrated fruits and vegetables manufacturer based in Solapur, Maharashtra. We supply export-grade dehydrated ginger, green chilli, carrot, cabbage, spinach, banana, and mango to food manufacturers and exporters worldwide.",
+  telephone: "+91-9423591545",
+  email: "contact@mntpfarmfresh.com",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "G4 Chincholi MIDC",
+    addressLocality: "Solapur",
+    addressRegion: "Maharashtra",
+    postalCode: "413255",
+    addressCountry: "IN",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91-9423591545",
+    contactType: "sales",
+    areaServed: ["IN","US","GB","AE","AU","DE"],
+    availableLanguage: ["English","Hindi","Marathi"],
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "What dehydrated products does MNTP Farm Fresh manufacture?",
+      acceptedAnswer: { "@type": "Answer", text: "MNTP Farm Fresh manufactures dehydrated ginger, green chilli, carrot, cabbage, spinach, banana, and mango. All products are available in flakes, powder, slices, and granule forms." } },
+    { "@type": "Question", name: "Where is MNTP Farm Fresh located?",
+      acceptedAnswer: { "@type": "Answer", text: "MNTP Farm Fresh is located at G4 Chincholi MIDC, Solapur, Maharashtra – 413255, India." } },
+    { "@type": "Question", name: "Do you supply dehydrated vegetables for export?",
+      acceptedAnswer: { "@type": "Answer", text: "Yes. MNTP Farm Fresh is APEDA registered and FSSAI licensed. We supply export-grade dehydrated vegetables and fruits to food manufacturers in the USA, UK, UAE, Australia, Germany, and across Asia." } },
+    { "@type": "Question", name: "What certifications does MNTP Farm Fresh hold?",
+      acceptedAnswer: { "@type": "Answer", text: "MNTP Farm Fresh holds FSSAI license, ISO 22000 certification, and APEDA registration. All products are third-party lab tested for moisture content, microbial count, and pesticide residue." } },
+    { "@type": "Question", name: "What is the dehydration capacity of MNTP Farm Fresh?",
+      acceptedAnswer: { "@type": "Answer", text: "Our facility at Chincholi MIDC, Solapur has a dehydration capacity of 1.6 MT per day, using a combination of heat pump, electric, and solar drying systems." } },
+    { "@type": "Question", name: "How can I request a bulk quote for dehydrated products?",
+      acceptedAnswer: { "@type": "Answer", text: "You can contact MNTP Farm Fresh by email at contact@mntpfarmfresh.com, by phone at +91 9423591545, or through the enquiry form on our website." } },
+  ],
+};
+
+function makeProductSchema(name, description, sku, keywords) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name, description, sku, keywords,
+    brand: { "@type": "Brand", name: "MNTP Farm Fresh" },
+    manufacturer: { "@type": "Organization", name: "MNTP Farm Fresh", url: SITE_URL },
+    offers: { "@type": "Offer", availability: "https://schema.org/InStock", priceCurrency: "USD",
+      seller: { "@type": "Organization", name: "MNTP Farm Fresh" } },
+  };
+}
+
+const PRODUCT_SCHEMAS = {
+  "Dehydrated Ginger":       makeProductSchema("Dehydrated Ginger",       "Export-grade dehydrated ginger in sliced, powder, granule, and split forms. Moisture ≤10%. Sourced from Kerala and Maharashtra.",  "MNTP-DG-001",  "dehydrated ginger, dried ginger powder, ginger flakes bulk exporter India"),
+  "Dehydrated Green Chilli": makeProductSchema("Dehydrated Green Chilli", "Sun-dried green chilli in flakes, powder, and slice forms. Moisture 6–8%. Sourced from Maharashtra and Andhra Pradesh.",          "MNTP-DGC-002", "dehydrated green chilli, dried chilli flakes bulk, chilli powder exporter India"),
+  "Dehydrated Carrot":       makeProductSchema("Dehydrated Carrot",       "Bright orange dehydrated carrot with retained beta-carotene. Moisture <5%. Available in flakes, powder, and slices.",              "MNTP-DC-003",  "dehydrated carrot, dried carrot flakes, carrot powder bulk India"),
+  "Dehydrated Cabbage":      makeProductSchema("Dehydrated Cabbage",      "Crisp dehydrated cabbage in flakes and slices. Moisture <5%. Ideal for soups, instant noodles, dehydrated meal mixes.",            "MNTP-DCB-004", "dehydrated cabbage, dried cabbage flakes bulk manufacturer India"),
+  "Dehydrated Spinach":      makeProductSchema("Dehydrated Spinach",      "Rich green dehydrated spinach in flakes and powder. Moisture <5%. Ideal for nutraceuticals and health powders.",                    "MNTP-DS-005",  "dehydrated spinach, dried spinach powder bulk, spinach flakes exporter India"),
+  "Dehydrated Banana":       makeProductSchema("Dehydrated Banana",       "Cream-yellow dehydrated banana in powder and slice forms. Moisture <5%. For baby food, bakery, smoothies.",                        "MNTP-DB-006",  "dehydrated banana, banana powder bulk, dried banana manufacturer India"),
+  "Dehydrated Mango":        makeProductSchema("Dehydrated Mango",        "Golden dehydrated mango in powder and slice forms. Moisture <5%. For beverages, desserts, export food manufacturing.",             "MNTP-DM-007",  "dehydrated mango, dried mango powder bulk, mango slices manufacturer India"),
+};
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 const LOGO_IMG = "/logo.png";
 
 const PRODUCT_IMGS = {
-  coriander: "/coriander.png",
   chilli: "/chilli.png",
   ginger: "/ginger.png",
-  springonion: "/onion.png",
   carrot: "/carrot.png",
-  tomato: "/tomato.png",
-}
+};
 
 const PRODUCTS = [
   {
-    name: "Dehydrated Coriander",
-    desc: "Bright-green dried coriander leaves preserving natural oils and flavour. Perfect for seasoning, spice blends, and ready-meal manufacturing.",
-    forms: ["Leaves", "Seeds", "Powder", "Crushed"],
-    mainImg: PRODUCT_IMGS.coriander,
-    specs: { "Moisture": "≤8%", "Colour": "Bright Green", "Volatile Oil": "Retained", "Shelf Life": "18 months", "Packaging": "5kg / 20kg bags", "Origin": "Maharashtra / Rajasthan" }
+    name: "Dehydrated Ginger",
+    desc: "Carefully sliced and dried ginger root retaining essential oils and gingerol. Widely used in beverages, spice mixes, health products, and export food processing.",
+    forms: ["Sliced", "Powder", "Granules", "Splits"],
+    mainImg: PRODUCT_IMGS.ginger,
+    specs: { "Moisture": "≤10%", "Colour": "Light Tan", "Cut Form": "Sliced / Powder / Granules / Splits", "Application": "Beverages, spice mixes, health products", "Packaging": "Poly Bag + Carton", "Origin": "Kerala / Maharashtra" }
   },
   {
     name: "Dehydrated Green Chilli",
-    desc: "Green chilli varieties dried to retain colour and heat levels. Available in whole, crushed, and powder form — ideal for export spice blends.",
-    forms: ["Whole", "Crushed", "Powder", "Flakes"],
+    desc: "Sun-dried green chilli retaining natural heat and colour. Used in sauces, seasonings, ready meals, and spice blends. Available in flakes, powder, and slices.",
+    forms: ["Flakes", "Powder", "Slices"],
     mainImg: PRODUCT_IMGS.chilli,
-    specs: { "Moisture": "≤7%", "Colour": "Green", "Heat Level": "Medium to High", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra / AP" }
-  },
-  {
-    name: "Dehydrated Ginger",
-    desc: "Carefully sliced and dried ginger root retaining essential oils. Widely used in beverages, spice mixes, health products, and export food processing.",
-    forms: ["Sliced", "Powder", "Granules", "Splits"],
-    mainImg: PRODUCT_IMGS.ginger,
-    specs: { "Moisture": "≤10%", "Colour": "Light Tan", "Gingerol": "Retained", "Shelf Life": "24 months", "Packaging": "10kg / 25kg bags", "Origin": "Kerala / Maharashtra" }
-  },
-  {
-    name: "Dehydrated Spring Onion",
-    desc: "Freshly harvested spring onions dehydrated to lock in their mild, sweet flavour and vibrant green colour. Ideal for instant noodles, soups, and seasoning blends.",
-    forms: ["Flakes", "Chopped", "Powder"],
-    mainImg: PRODUCT_IMGS.springonion,
-    specs: { "Moisture": "≤6%", "Colour": "Green to White", "Flavour": "Mild & Sweet", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra" }
+    specs: { "Moisture": "6–8%", "Colour": "Natural green to olive green", "Cut Form": "Flakes / Powder / Slices", "Application": "Sauces, seasonings, ready meals", "Packaging": "LDPE liner + Carton", "Origin": "Maharashtra / AP" }
   },
   {
     name: "Dehydrated Carrot",
-    desc: "Bright orange carrot slices and powder with retained beta-carotene and natural sweetness. Widely used in soups, baby food, and health products.",
-    forms: ["Flakes", "Powder", "Diced", "Granules"],
+    desc: "Bright orange carrot with retained beta-carotene and natural sweetness. Widely used in beverages, desserts, flavouring, and health powders.",
+    forms: ["Flakes", "Powder", "Slices"],
     mainImg: PRODUCT_IMGS.carrot,
-    specs: { "Moisture": "≤7%", "Colour": "Bright Orange", "Beta-Carotene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 25kg bags", "Origin": "Maharashtra / Rajasthan" }
+    specs: { "Moisture": "<5%", "Colour": "Bright orange", "Cut Form": "Flakes / Powder / Slices", "Application": "Beverages, desserts, flavoring", "Packaging": "Poly bag + Carton", "Origin": "Maharashtra / Rajasthan" }
   },
   {
-    name: "Dehydrated Tomato",
-    desc: "Sun-dried and tunnel-dried tomatoes with rich colour and concentrated flavour. Available in flakes, powder, and sun-dried form for sauces, seasonings, and snacks.",
-    forms: ["Flakes", "Powder", "Sun-Dried"],
-    mainImg: PRODUCT_IMGS.tomato,
-    specs: { "Moisture": "≤7%", "Colour": "Deep Red", "Lycopene": "Retained", "Shelf Life": "18 months", "Packaging": "10kg / 20kg bags", "Origin": "Maharashtra / Karnataka" }
+    name: "Dehydrated Cabbage",
+    desc: "Crisp dehydrated cabbage ideal for soups, instant noodles, and dehydrated meal mixes. Maintains light colour and mild flavour after rehydration.",
+    forms: ["Flakes", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Creamy white to light green", "Cut Form": "Flakes / Slices", "Application": "Soups, instant noodles, dehydrated mixes", "Packaging": "Kraft + Liner", "Origin": "Maharashtra" }
+  },
+  {
+    name: "Dehydrated Spinach",
+    desc: "Rich green spinach flakes and powder retaining chlorophyll and nutrients. Ideal for nutraceuticals, health powders, and fortified food blends.",
+    forms: ["Flakes", "Powder"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Rich green", "Cut Form": "Flakes / Powder", "Application": "Nutraceuticals, powders, health blends", "Packaging": "Vacuum Packing Optional", "Origin": "Maharashtra" }
+  },
+  {
+    name: "Dehydrated Banana",
+    desc: "Creamy banana powder and slices made from ripe bananas. Perfect for baby food, bakery products, smoothies, and nutritional powders.",
+    forms: ["Powder", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Cream to light yellow", "Cut Form": "Powder / Slices", "Application": "Baby food, bakery, smoothies", "Packaging": "Poly Bag + Carton", "Origin": "Maharashtra / Karnataka" }
+  },
+  {
+    name: "Dehydrated Mango",
+    desc: "Golden mango powder and slices with concentrated tropical flavour. Used in beverages, desserts, flavouring, and export food manufacturing.",
+    forms: ["Powder", "Slices"],
+    mainImg: null,
+    specs: { "Moisture": "<5%", "Colour": "Yellow to golden yellow", "Cut Form": "Powder / Slices", "Application": "Beverages, desserts, flavoring", "Packaging": "Poly Bag + Carton", "Origin": "Maharashtra / Konkan" }
   },
 ];
 
 const QUALITY_STEPS = [
-  { icon: "🌱", tag: "Source", title: "Farm-Level Procurement", desc: "We partner directly with verified farmers across Maharashtra. Every batch is traceable to its origin field, ensuring chemical-free practices from root to harvest.", img: "" },
-  { icon: "🔬", tag: "Inspection", title: "Raw Material Testing", desc: "Incoming produce undergoes moisture content analysis, microbial screening, and pesticide residue testing before entering our facility.", img: "" },
-  { icon: "⚙️", tag: "Processing", title: "Controlled Dehydration", desc: "Tunnel dryers maintain temperature within ±2°C tolerance, preserving colour, texture, and nutritional integrity.", img: "" },
-  { icon: "📊", tag: "Analysis", title: "In-Process QC Checks", desc: "Every 30 minutes our lab team samples product from the line — checking moisture levels, Aw, and visual grade to prevent batch drift.", img: "" },
-  { icon: "🧪", tag: "Lab", title: "Finished Product Testing", desc: "Final products are tested for moisture %, bulk density, ash content, particle size distribution, and microbial count before packing approval.", img: "" },
-  { icon: "📦", tag: "Packaging", title: "Hygienic & Sealed Packaging", desc: "Food-grade poly packs, HDPE bags, and nitrogen-flushed pouches ensure shelf life of 12–24 months. Custom export packaging available.", img: "" },
+  { icon: "🌱", tag: "Source",     title: "Farm-Level Procurement",    desc: "We partner directly with verified farmers across Maharashtra. Every batch is traceable to its origin field, ensuring chemical-free practices from root to harvest." },
+  { icon: "🔬", tag: "Inspection", title: "Raw Material Testing",      desc: "Incoming produce undergoes moisture content analysis, microbial screening, and pesticide residue testing before entering our facility." },
+  { icon: "⚙️", tag: "Processing", title: "Controlled Dehydration",    desc: "Tunnel dryers maintain temperature within ±2°C tolerance, preserving colour, texture, and nutritional integrity." },
+  { icon: "📊", tag: "Analysis",   title: "In-Process QC Checks",      desc: "Every 30 minutes our lab team samples product from the line — checking moisture levels, Aw, and visual grade to prevent batch drift." },
+  { icon: "🧪", tag: "Lab",        title: "Finished Product Testing",  desc: "Final products are tested for moisture %, bulk density, ash content, particle size distribution, and microbial count before packing approval." },
+  { icon: "📦", tag: "Packaging",  title: "Hygienic & Sealed Packaging", desc: "Food-grade poly packs, HDPE bags, and nitrogen-flushed pouches ensure shelf life of 12–24 months. Custom export packaging available." },
 ];
 
 const PROCESS_STEPS = [
-  { tag: "Stage 01", title: "Sourcing & Procurement", desc: "We source directly from contract farmers and select wholesale markets in Solapur, Nashik, and Kolhapur. Seasonality is managed through cold-store inventory to ensure year-round supply.", details: ["Direct Farmer Tie-ups", "Seasonal Planning", "Variety Selection", "Cold Storage Buffer"] },
-  { tag: "Stage 02", title: "Sorting & Grading", desc: "Received produce is sorted by size, colour, and quality grade. Damaged or substandard pieces are separated on conveyor inspection tables before any processing begins.", details: ["Manual Inspection", "Size Grading", "Colour Sorting", "Reject Removal"] },
-  { tag: "Stage 03", title: "Washing & Cleaning", desc: "Multiple-stage washing using food-grade water removes field dust, surface contaminants, and pesticide residues. Produce is sanitised with approved food-safe solutions.", details: ["Multi-Stage Wash", "Sanitisation", "Water Recirculation", "Surface Drying"] },
-  { tag: "Stage 04", title: "Cutting & Slicing", desc: "Depending on the final product specification — flakes, slices, or minced — stainless steel cutters process the cleaned material to uniform dimensions for consistent drying.", details: ["Uniform Cut Size", "SS Equipment", "Custom Specification", "Mincing / Slicing / Flaking"] },
-  { tag: "Stage 05", title: "Dehydration", desc: "Tunnel dehydrators operate at controlled temperatures (50–70°C) with calibrated airflow across multiple passes. Total drying time varies by product — typically 8 to 14 hours — until target moisture of ≤5% is achieved.", details: ["Tunnel Dryers", "50–70°C Range", "Airflow Calibration", "≤5% Moisture Target"] },
-  { tag: "Stage 06", title: "Post-Drying Processing", desc: "Dried product is milled, screened, or blended depending on final form (powder, granule, flake). Screens ensure uniform particle size before batch approval.", details: ["Milling", "Sieving", "Blending", "Particle Sizing"] },
-  { tag: "Stage 07", title: "Quality Testing & Packing", desc: "Each approved batch is weighed, tested, and packed in food-grade packaging. Batch codes, production date, expiry, and export documentation are generated at this stage.", details: ["Batch Testing", "Food-grade Packs", "Export Labelling", "Documentation"] },
+  { tag: "Raw Material", title: "Raw Material Reception",  ccp: null, ccpNum: null, desc: "Fresh produce is received directly from our contract farms and verified supplier network. Each incoming batch is weighed, tagged with farm origin, and held for pre-processing inspection before entering the facility.", details: ["Farm-Level Traceability","Batch Tagging","Weight & Volume Check","Origin Documentation"], color: "#2d6a35" },
+  { tag: "CCP 1", title: "Sorting & Grading",             ccp: "Foreign Material Removal", ccpNum: 1, desc: "Produce is manually and mechanically sorted by size, colour, and quality. Foreign materials, damaged pieces, and substandard units are removed at this critical control point before any further processing.", details: ["Foreign Material Removal","Size Grading","Colour Sorting","Conveyor Inspection"], color: "#b85450" },
+  { tag: "Processing", title: "Cutting / Size Reduction", ccp: null, ccpNum: null, desc: "Sorted produce is cut to uniform dimensions using stainless steel cutters. Cut form — flakes, slices, or powder — is set per customer specification to ensure consistent drying and final appearance.", details: ["Uniform Cut Size","SS Equipment","Flakes / Slices / Minced","Custom Specification"], color: "#d4a017" },
+  { tag: "CCP 2", title: "Bubble Washing",                ccp: "Surface Contaminant Removal", ccpNum: 2, desc: "Cut produce passes through a multi-stage bubble wash system using food-grade water. High-pressure bubbling action removes surface dust, soil, and residual contaminants from all surfaces.", details: ["Bubble Wash System","Multi-Stage Rinse","Food-Grade Water","Surface Contaminant Removal"], color: "#b85450" },
+  { tag: "CCP 3", title: "Ozone Treatment",               ccp: "Microbial & Pesticide Load Reduction", ccpNum: 3, desc: "Washed produce is treated with controlled ozone dosing to reduce microbial load and residual pesticide concentration. This chemical-free treatment is a key differentiator in our food safety protocol.", details: ["Ozonization System","Microbial Reduction","Pesticide Load Reduction","Chemical-Free Treatment"], color: "#b85450" },
+  { tag: "CCP 4", title: "Blanching",                     ccp: "Microbial & Enzyme Control", ccpNum: 4, desc: "Produce undergoes controlled heat blanching to inactivate enzymes that cause colour and flavour degradation, and to achieve further reduction of microbial count before the drying stage.", details: ["Heat Blanching","Enzyme Inactivation","Colour Preservation","Microbial Control"], color: "#d4a017" },
+  { tag: "Drying", title: "Solar Drying",                 ccp: null, ccpNum: null, desc: "Pre-processed produce enters our solar drying system for initial moisture reduction. This energy-efficient first stage reduces bulk moisture before controlled mechanical drying begins.", details: ["Solar Dryer","Initial Moisture Reduction","Energy Efficient","Natural Process"], color: "#4a9e55" },
+  { tag: "Drying", title: "Heat Pump Drying",             ccp: null, ccpNum: null, desc: "The heat pump dryer performs controlled dehydration at consistent temperatures, preserving colour, aroma, and nutritional content. This stage handles the bulk of moisture reduction.", details: ["Heat Pump System","Controlled Dehydration","Colour Retention","Aroma Preservation"], color: "#4a9e55" },
+  { tag: "CCP 5", title: "Electric Drying",               ccp: "Final Moisture Adjustment", ccpNum: 5, desc: "The electric dryer provides precise final moisture adjustment to meet exact product specifications (typically ≤5–8%). This critical control point ensures every batch meets the target moisture level before packing.", details: ["Electric Dryer","Final Moisture Adjustment","≤5–8% Target","Precision Control"], color: "#b85450" },
+  { tag: "CCP 6", title: "Packaging",                     ccp: "Hygiene & Contamination Control", ccpNum: 6, desc: "Approved product is packed in our PUF panel-based, temperature-controlled, dust-free packaging area. Food-grade packaging (LDPE, poly bags, Kraft+liner, vacuum packs) is applied with full batch documentation and export labelling.", details: ["Dust-Free Packing Area","Food-Grade Packaging","Batch Documentation","Export Labelling"], color: "#7b5ea7" },
+  { tag: "Cold Storage", title: "Cold Storage",           ccp: null, ccpNum: null, desc: "Finished goods are stored under controlled cold storage conditions to ensure product stability and maintain shelf life of 12–24 months. Inventory is managed on a FIFO basis with full traceability.", details: ["Temperature Controlled","FIFO Management","12–24 Month Shelf Life","Finished Goods Stability"], color: "#5ba4a4" },
 ];
 
+const FARM_PHOTOS = [
+  { src: "https://i.ibb.co/vx8YFzF7/DSC-4977.jpg",   caption: "Tomato vines in full bloom",             tag: "Tomato Farm"     },
+  { src: "https://i.ibb.co/cStyWBHd/DSC-4985.jpg",   caption: "Fresh bottle gourd on the vine",         tag: "Produce"         },
+  { src: "https://i.ibb.co/Y7dDnsF0/DSC-4949.jpg",   caption: "Seedlings planted under mulch",          tag: "Planting Stage"  },
+  { src: "https://i.ibb.co/SDs30Sdq/DSC-49117.jpg",  caption: "Moringa trees in flower",                tag: "Farm Diversity"  },
+  { src: "https://i.ibb.co/XxPjM083/DSC-4975.jpg",   caption: "Trellised crop rows with drip irrigation", tag: "Our Fields"   },
+];
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
 const style = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Satisfy&display=swap');
   :root {
@@ -109,7 +231,6 @@ const style = `
   .page { min-height: 100vh; padding-top: 72px; animation: pageIn 0.55s cubic-bezier(0.22,1,0.36,1) both; }
   @keyframes pageIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* HERO */
   .hero { position: relative; height: calc(100vh - 72px); background: var(--green-deep); display: flex; align-items: center; overflow: hidden; }
   .hero-bg-pattern { position: absolute; inset: 0; background-image: radial-gradient(ellipse 120% 80% at 70% 50%, rgba(45,106,53,0.4) 0%, transparent 70%); }
   .hero-content { position: relative; z-index: 2; padding: 0 80px; max-width: 620px; }
@@ -120,22 +241,49 @@ const style = `
   .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--amber); color: var(--white); padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; border: none; transition: all 0.25s; animation: fadeSlideUp 0.7s 0.4s both; font-family: 'DM Sans', sans-serif; }
   .hero-cta:hover { background: var(--amber-light); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(196,135,58,0.35); }
   @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-  /* TICKER */
   .ticker { background: var(--amber); padding: 12px 0; overflow: hidden; white-space: nowrap; }
   .ticker-inner { display: inline-flex; animation: tickerScroll 20s linear infinite; }
   .ticker-item { display: inline-flex; align-items: center; gap: 16px; padding: 0 48px; font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white); }
   .ticker-dot { width: 5px; height: 5px; background: rgba(255,255,255,0.6); border-radius: 50%; }
   @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* STORY */
   .story-section { padding: 100px 80px; background: var(--white); }
   .section-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--green-fresh); font-weight: 500; margin-bottom: 12px; }
   .section-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 3.5vw, 52px); font-weight: 700; color: var(--green-deep); line-height: 1.2; margin-bottom: 20px; }
   .section-body { font-size: 16px; line-height: 1.85; color: var(--text-mid); max-width: 600px; }
   .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto; }
 
-  /* VALUES */
+  .farm-gallery-section { padding: 0 0 80px; background: var(--white); }
+  .farm-gallery-inner { max-width: 1200px; margin: 0 auto; padding: 0 80px; }
+  .farm-gallery-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--green-fresh); font-weight: 500; margin-bottom: 12px; }
+  .farm-gallery-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3vw, 38px); font-weight: 700; color: var(--green-deep); margin-bottom: 32px; }
+  .farm-mosaic { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 260px 260px; gap: 10px; }
+  .mosaic-item { position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; }
+  .mosaic-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 2; }
+  .mosaic-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
+  .mosaic-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+  .mosaic-item:nth-child(4) { grid-column: 1 / 4; grid-row: 2 / 3; }
+  .mosaic-item:nth-child(5) { grid-column: 4 / 9; grid-row: 2 / 3; }
+  .mosaic-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .mosaic-item:hover img { transform: scale(1.06); }
+  .mosaic-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,30,17,0.7) 0%, transparent 55%); opacity: 0; transition: opacity 0.3s; }
+  .mosaic-item:hover .mosaic-overlay { opacity: 1; }
+  .mosaic-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 18px; transform: translateY(8px); opacity: 0; transition: all 0.3s; }
+  .mosaic-item:hover .mosaic-caption { transform: translateY(0); opacity: 1; }
+  .mosaic-tag { display: inline-block; background: var(--amber); color: white; font-size: 10px; padding: 2px 10px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+  .mosaic-cap-text { font-size: 13px; color: rgba(245,240,232,0.9); line-height: 1.4; }
+
+  .farm-video-section { background: var(--green-deep); padding: 72px 80px; }
+  .farm-video-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: center; }
+  .farm-video-text .section-title { color: var(--cream); }
+  .farm-video-text .section-label { color: var(--amber-light); }
+  .farm-video-text .section-body { color: rgba(245,240,232,0.7); }
+  .farm-video-wrap { border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.4); position: relative; }
+  .farm-video-wrap video { width: 100%; display: block; max-height: 480px; object-fit: cover; background: #000; }
+  .video-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(196,135,58,0.18); border: 1px solid rgba(196,135,58,0.35); border-radius: 100px; padding: 6px 16px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--amber-light); margin-bottom: 20px; }
+
   .values-strip { background: var(--green-deep); padding: 72px 80px; display: flex; gap: 0; justify-content: center; }
   .value-item { flex: 1; padding: 0 40px; border-right: 1px solid rgba(255,255,255,0.1); text-align: center; }
   .value-item:last-child { border-right: none; }
@@ -143,7 +291,6 @@ const style = `
   .value-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--cream); margin-bottom: 10px; }
   .value-desc { font-size: 13.5px; color: rgba(245,240,232,0.6); line-height: 1.7; }
 
-  /* HOME ENQUIRY */
   .home-enquiry { background: var(--cream); padding: 80px; }
   .home-enquiry-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; align-items: center; }
   .home-enquiry-form { background: var(--white); border-radius: 20px; padding: 40px; box-shadow: 0 8px 40px rgba(26,58,31,0.1); }
@@ -152,7 +299,6 @@ const style = `
   .home-ci-title { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--green-mid); margin-bottom: 3px; font-weight: 500; }
   .home-ci-val { font-size: 14px; color: var(--text-mid); line-height: 1.5; }
 
-  /* PRODUCTS */
   .products-main { flex: 1; padding: 48px 64px 80px; }
   .products-main-header { margin-bottom: 36px; }
   .products-main-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--green-deep); margin-bottom: 8px; }
@@ -170,7 +316,6 @@ const style = `
   .product-card-btn:hover { background: var(--amber); }
   .products-cta-strip { background: var(--green-deep); padding: 48px 80px; text-align: center; }
 
-  /* QUALITY */
   .quality-hero { background: var(--cream); padding: 80px 80px 0; text-align: center; }
   .quality-hero .section-title { color: var(--green-deep); }
   .quality-timeline { padding: 72px 80px; background: var(--white); position: relative; }
@@ -195,23 +340,11 @@ const style = `
   .cert-name { font-size: 14px; font-weight: 500; color: var(--cream); margin-bottom: 4px; }
   .cert-note { font-size: 11px; color: rgba(245,240,232,0.5); }
 
-  /* PROCESS */
   .process-hero { background: linear-gradient(160deg, var(--green-deep) 0%, #0d2010 100%); padding: 80px 80px 60px; text-align: center; position: relative; overflow: hidden; }
   .process-hero .section-title { color: var(--cream); position: relative; }
   .process-hero .section-label { color: var(--amber-light); position: relative; }
   .process-hero .section-body { color: rgba(245,240,232,0.65); margin: 0 auto; text-align: center; max-width: 520px; position: relative; }
-  .process-steps { padding: 80px; background: var(--cream); display: flex; flex-direction: column; }
-  .process-step { display: grid; grid-template-columns: 80px 1fr; gap: 32px; padding: 48px 0; border-bottom: 1px solid var(--cream-dark); align-items: start; max-width: 900px; margin: 0 auto; width: 100%; transition: all 0.3s; }
-  .process-step:last-child { border-bottom: none; }
-  .process-step:hover .step-num { background: var(--amber); }
-  .step-num { width: 72px; height: 72px; background: var(--green-deep); color: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; flex-shrink: 0; transition: all 0.3s; margin-top: 8px; }
-  .step-tag { display: inline-block; background: var(--green-fresh); color: var(--white); font-size: 10px; padding: 3px 10px; border-radius: 100px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-  .step-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--green-deep); margin-bottom: 10px; }
-  .step-desc { font-size: 15px; line-height: 1.8; color: var(--text-mid); margin-bottom: 14px; max-width: 580px; }
-  .step-details { display: flex; flex-wrap: wrap; gap: 8px; }
-  .step-detail { background: var(--white); border: 1px solid var(--cream-dark); color: var(--green-mid); font-size: 12px; padding: 4px 12px; border-radius: 100px; }
 
-  /* CONTACT */
   .contact-page { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 72px); }
   .contact-left { background: var(--green-deep); padding: 80px 64px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
   .contact-left::before { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: rgba(74,158,85,0.1); bottom: -100px; right: -100px; }
@@ -236,7 +369,6 @@ const style = `
   .form-submit:hover { background: var(--green-fresh); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,58,31,0.2); }
   .submit-success { background: rgba(74,158,85,0.12); border: 1.5px solid var(--green-fresh); border-radius: 12px; padding: 20px 24px; color: var(--green-mid); font-size: 15px; display: flex; align-items: center; gap: 12px; margin-top: 16px; animation: fadeSlideUp 0.4s both; }
 
-  /* FOOTER */
   footer { background: #0d1f10; padding: 48px 80px 28px; display: flex; flex-direction: column; gap: 32px; }
   .footer-top { display: flex; align-items: center; justify-content: space-between; }
   .footer-logo { font-family: 'Arial Black', sans-serif; font-size: 24px; font-weight: 900; color: var(--white); letter-spacing: 1px; text-transform: uppercase; }
@@ -247,34 +379,119 @@ const style = `
   .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
   .footer-copy { font-size: 12px; color: rgba(245,240,232,0.3); }
 
-  /* WHATSAPP */
   .whatsapp-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.4); cursor: pointer; border: none; transition: all 0.25s; text-decoration: none; }
   .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
   .whatsapp-float svg { width: 30px; height: 30px; }
 
-  @media (max-width: 900px) {
+  .lightbox-overlay { position: fixed; inset: 0; z-index: 300; background: rgba(5,15,7,0.92); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; animation: pageIn 0.25s both; }
+  .lightbox-img { max-width: 88vw; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 32px 80px rgba(0,0,0,0.6); }
+  .lightbox-close { position: absolute; top: 24px; right: 28px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .lightbox-close:hover { background: rgba(255,255,255,0.22); }
+  .lightbox-caption { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); background: rgba(15,30,17,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 8px 20px; color: rgba(245,240,232,0.85); font-size: 14px; white-space: nowrap; }
+
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(26,58,31,0.98); backdrop-filter: blur(12px); z-index: 99; flex-direction: column; padding: 12px 0 20px; border-bottom: 1px solid rgba(74,158,85,0.25); animation: fadeSlideUp 0.25s both; }
+  .mobile-menu.open { display: flex; }
+  .mobile-nav-tab { padding: 14px 28px; border: none; background: transparent; color: rgba(245,240,232,0.8); font-family: 'DM Sans', sans-serif; font-size: 16px; letter-spacing: 0.5px; cursor: pointer; text-align: left; transition: all 0.2s; }
+  .mobile-nav-tab:hover, .mobile-nav-tab.active { color: var(--amber-light); background: rgba(196,135,58,0.1); }
+
+  @media (max-width: 768px) {
+    .nav-tabs { display: none; }
+    .nav-hamburger { display: flex; }
     nav { padding: 0 20px; }
-    .nav-tabs { gap: 2px; }
-    .nav-tab { padding: 6px 10px; font-size: 12px; }
-    .hero-content { padding: 0 28px; }
-    .story-grid, .contact-page, .home-enquiry-inner { grid-template-columns: 1fr; gap: 40px; }
-    .story-section, .process-steps, .contact-left, .contact-right, .cert-strip, .values-strip, .home-enquiry { padding: 48px 24px; }
-    .products-hero, .process-hero, .quality-hero { padding: 60px 24px 40px; }
+    .logo-main { font-size: 14px; }
+    .logo-sub { font-size: 8px; }
+    nav img { width: 36px !important; height: 36px !important; }
+    .hero-content { padding: 0 24px; }
+    .story-grid, .contact-page, .home-enquiry-inner, .farm-video-inner { grid-template-columns: 1fr; gap: 32px; }
+    .story-section { padding: 48px 20px; }
+    .process-steps, .contact-left, .contact-right, .cert-strip, .home-enquiry { padding: 40px 20px; }
+    .values-strip { flex-direction: column; padding: 48px 24px; gap: 32px; }
+    .value-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0 0 32px; }
+    .value-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .farm-gallery-inner { padding: 0 16px; }
+    .farm-gallery-section { padding: 0 0 48px; }
+    .farm-video-section { padding: 40px 20px; }
+    .products-hero, .process-hero, .quality-hero { padding: 48px 20px 32px; }
     .form-row { grid-template-columns: 1fr; }
-    footer { padding: 40px 24px 20px; }
+    footer { padding: 36px 20px 20px; }
+    .footer-top { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .products-grid { grid-template-columns: 1fr; gap: 12px; max-width: 100%; margin: 0; }
+    .products-main { padding: 24px 16px 60px; }
+    .product-card { flex-direction: row; align-items: center; padding: 16px; text-align: left; gap: 14px; min-width: 0; overflow: hidden; }
+    .product-card-img-wrap { width: 88px; height: 88px; min-width: 88px; flex-shrink: 0; margin-bottom: 0; }
+    .product-card-content { flex: 1; min-width: 0; overflow: hidden; }
+    .product-card-name { font-size: 15px; margin-bottom: 5px; white-space: normal; }
+    .product-card-forms { justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 4px; max-width: 100%; overflow: hidden; }
+    .product-card-form { font-size: 10px; padding: 2px 8px; white-space: nowrap; }
+    .product-card-btn { font-size: 11px; padding: 7px 14px; width: auto; }
+    .home-enquiry-form { padding: 24px 20px; }
+    .quality-timeline { padding: 48px 20px; }
+    .quality-timeline::before { left: 20px; }
+    .qt-item { grid-template-columns: 24px 1fr; gap: 12px; margin-bottom: 36px; }
+    .qt-empty { display: none; }
+    .qt-dot-wrap { grid-column: 1; justify-content: flex-start; }
+    .qt-dot { width: 36px; height: 36px; font-size: 16px; }
+    .qt-content { grid-column: 2; }
+    .cert-strip { padding: 40px 20px; gap: 16px; }
+    .farm-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px 200px; gap: 8px; }
+    .mosaic-item:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(3) { grid-column: 1 / 2; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(4) { grid-column: 2 / 3; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3 / 4; }
+    .mosaic-overlay { opacity: 1; }
+    .mosaic-caption { opacity: 1; transform: translateY(0); padding: 10px 12px; }
+    .mosaic-tag { font-size: 9px; padding: 2px 8px; }
+    .mosaic-cap-text { font-size: 11px; }
+    .process-steps { padding: 40px 20px; }
+    .process-step { grid-template-columns: 52px 1fr; gap: 16px; padding: 28px 0; }
+    .step-num { width: 48px; height: 48px; font-size: 20px; }
+    .step-title { font-size: 18px; }
+    .process-hero { padding: 48px 20px 32px; }
+    .facility-grid { grid-template-columns: 1fr !important; }
+    .plant-stats-grid { grid-template-columns: 1fr !important; }
+    .process-banner { padding: 20px 16px !important; flex-direction: column !important; gap: 16px !important; }
+    .process-banner > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0 0 16px !important; }
+    .process-banner > div:last-child { border-bottom: none; padding-bottom: 0 !important; }
+    .facility-section { padding: 40px 16px !important; }
+    .ccp-legend { padding: 32px 16px 0 !important; }
+    .process-flow { padding: 24px 16px 60px !important; }
+    .products-cta-strip { padding: 40px 20px; }
+    .whatsapp-float { bottom: 16px; right: 16px; width: 48px; height: 48px; }
+  }
+
+  @media (min-width: 769px) and (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-tabs { display: none; }
+    .nav-hamburger { display: flex; }
+    .story-grid, .contact-page, .home-enquiry-inner, .farm-video-inner { grid-template-columns: 1fr; gap: 40px; }
+    .story-section, .process-steps, .contact-left, .contact-right, .cert-strip, .values-strip, .home-enquiry, .farm-video-section { padding: 48px 32px; }
+    .farm-gallery-inner { padding: 0 32px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 40px 32px 20px; }
     .footer-top { flex-direction: column; gap: 16px; text-align: center; }
     .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .products-main { padding: 24px; }
-    .home-enquiry-form { padding: 24px; }
+    .products-main { padding: 32px; }
+    .home-enquiry-form { padding: 28px; }
     .quality-timeline::before { left: 30px; }
     .qt-item { grid-template-columns: 30px 1fr; }
     .qt-empty { display: none; }
     .qt-dot-wrap { grid-column: 1; justify-content: flex-start; }
     .qt-content { grid-column: 2; }
+    .farm-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
+    .mosaic-item:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .mosaic-item:nth-child(3) { grid-column: 1 / 2; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(4) { grid-column: 2 / 3; grid-row: 2 / 3; }
+    .mosaic-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3 / 4; }
   }
 `;
 
+// ─── Enquiry Form ─────────────────────────────────────────────────────────────
 function EnquiryForm({ onSubmit, submitted, formData, setFormData }) {
   return (
     <div>
@@ -319,19 +536,36 @@ function EnquiryForm({ onSubmit, submitted, formData, setFormData }) {
       </div>
       <button className="form-submit" onClick={onSubmit}>Send Enquiry 🌿</button>
       {submitted && (
-        <div className="submit-success">
-          ✅ Thank you! We will respond within 24 hours.
-        </div>
+        <div className="submit-success">✅ Thank you! We will respond within 24 hours.</div>
       )}
     </div>
   );
 }
 
+// ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const [activeTab, setActiveTab] = useState("story");
-  const [formData, setFormData] = useState({ name: "", company: "", email: "", phone: "", product: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState(() => {
+    const hash = window.location.hash.replace("#", "");
+    return ["story","products","quality","process","contact"].includes(hash) ? hash : "story";
+  });
+  const [formData, setFormData]       = useState({ name: "", company: "", email: "", phone: "", product: "", message: "" });
+  const [submitted, setSubmitted]     = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [lightboxPhoto, setLightboxPhoto]     = useState(null);
+  const [menuOpen, setMenuOpen]       = useState(false);
+
+  useEffect(() => { window.location.hash = activeTab; }, [activeTab]);
+
+  useEffect(() => {
+    const onPop = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (["story","products","quality","process","contact"].includes(hash)) {
+        setActiveTab(hash); setSelectedProduct(null); setMenuOpen(false);
+      } else { setActiveTab("story"); }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const handleSubmit = () => {
     if (formData.name && formData.email) {
@@ -342,11 +576,11 @@ export default function App() {
   };
 
   const tabs = [
-    { id: "story", label: "Our Story" },
-    { id: "products", label: "Products" },
-    { id: "quality", label: "Quality" },
-    { id: "process", label: "Process" },
-    { id: "contact", label: "Contact Us" },
+    { id: "story",    label: "Our Story"   },
+    { id: "products", label: "Products"    },
+    { id: "quality",  label: "Quality"     },
+    { id: "process",  label: "Process"     },
+    { id: "contact",  label: "Contact Us"  },
   ];
 
   const goToContact = (productName) => {
@@ -354,16 +588,66 @@ export default function App() {
     setActiveTab("contact");
   };
 
-  const tickerItems = ["Dehydrated Onion","Dehydrated Garlic","Coriander Leaves","Ginger Powder","Green Chilli","Custom Blends","Export Quality","FSSAI Certified","Farm to Table","MNTP Farm Fresh"];
+  const tickerItems = ["Dehydrated Ginger","Dehydrated Green Chilli","Dehydrated Carrot","Dehydrated Spinach","Dehydrated Mango","Dehydrated Banana","Custom Blends","Export Quality","FSSAI Certified","Farm to Table","MNTP Farm Fresh"];
+
+  // ── Per-tab SEO config ────────────────────────────────────────────────────
+  const tabSEO = {
+    story: {
+      title: "Dehydrated Fruits & Vegetables Manufacturer — Solapur, Maharashtra",
+      description: "MNTP Farm Fresh manufactures export-grade dehydrated ginger, green chilli, carrot, spinach, mango and more. FSSAI licensed, ISO 22000, APEDA registered. Based in Solapur, Maharashtra. Bulk supply worldwide.",
+      path: "/#story",
+      schema: [organizationSchema, faqSchema],
+    },
+    products: {
+      title: "Dehydrated Vegetables & Fruits — Bulk Manufacturer India",
+      description: "Explore MNTP Farm Fresh's full range: dehydrated ginger, green chilli, carrot, cabbage, spinach, banana, and mango. Available in flakes, powder, and slices. FSSAI certified, bulk export supply.",
+      path: "/#products",
+      schema: [organizationSchema, ...Object.values(PRODUCT_SCHEMAS)],
+    },
+    quality: {
+      title: "Quality Standards & Certifications — FSSAI, ISO 22000, APEDA",
+      description: "MNTP Farm Fresh is FSSAI licensed, ISO 22000 certified, and APEDA registered. Our quality process covers farm procurement, pesticide testing, ozone treatment, blanching, and finished product lab analysis.",
+      path: "/#quality",
+      schema: [organizationSchema],
+    },
+    process: {
+      title: "Dehydration Process & HACCP Control Points — MNTP Farm Fresh",
+      description: "11-stage HACCP-aligned dehydration with 6 critical control points including ozonization, blanching, and precision electric drying. 1.6 MT/day capacity at Chincholi MIDC, Solapur.",
+      path: "/#process",
+      schema: [organizationSchema],
+    },
+    contact: {
+      title: "Contact Us — Bulk Enquiry for Dehydrated Products",
+      description: "Send a bulk enquiry to MNTP Farm Fresh. G4 Chincholi MIDC, Solapur, Maharashtra. Phone: +91 9423591545. Email: contact@mntpfarmfresh.com. We respond within 24 hours.",
+      path: "/#contact",
+      schema: [organizationSchema],
+    },
+  };
+
+  const activeSEO = selectedProduct
+    ? {
+        title: `${selectedProduct.name} — Bulk Manufacturer & Exporter`,
+        description: selectedProduct.desc,
+        path: "/#products",
+        schema: PRODUCT_SCHEMAS[selectedProduct.name] ? [PRODUCT_SCHEMAS[selectedProduct.name]] : [],
+      }
+    : (tabSEO[activeTab] || tabSEO.story);
 
   return (
-    <>
+    <HelmetProvider>
+      <SEO
+        title={activeSEO.title}
+        description={activeSEO.description}
+        path={activeSEO.path}
+        schema={activeSEO.schema}
+      />
       <style>{style}</style>
       <div className="site-wrapper">
 
+        {/* ── NAV ── */}
         <nav>
-          <div className="nav-logo" onClick={() => setActiveTab("story")}>
-            <img src={LOGO_IMG} alt="MNTP Logo" style={{width: 44, height: 44, objectFit: "contain", flexShrink: 0}} />
+          <div className="nav-logo" onClick={() => { setActiveTab("story"); setMenuOpen(false); }}>
+            <img src={LOGO_IMG} alt="MNTP Farm Fresh Logo" style={{width:44,height:44,objectFit:"contain",flexShrink:0}} />
             <div className="logo-text">
               <span className="logo-main">MNTP <span>FARM FRESH</span></span>
               <span className="logo-sub">Dehydrated · Exports</span>
@@ -375,10 +659,26 @@ export default function App() {
                 onClick={() => setActiveTab(t.id)}>{t.label}</button>
             ))}
           </div>
+          <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+            <span style={{transform: menuOpen ? "rotate(45deg) translate(5px,5px)" : "none"}} />
+            <span style={{opacity: menuOpen ? 0 : 1}} />
+            <span style={{transform: menuOpen ? "rotate(-45deg) translate(5px,-5px)" : "none"}} />
+          </button>
         </nav>
+        <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+          {tabs.map(t => (
+            <button key={t.id} className={`mobile-nav-tab ${activeTab === t.id ? "active" : ""}`}
+              onClick={() => { setActiveTab(t.id); setMenuOpen(false); }}>{t.label}</button>
+          ))}
+        </div>
 
+        {/* ══════════════════════════════════════════════════
+            OUR STORY PAGE
+        ══════════════════════════════════════════════════ */}
         {activeTab === "story" && (
           <div className="page" key="story">
+
+            {/* Hero */}
             <div className="hero">
               <div className="hero-bg-pattern" />
               <div className="hero-content">
@@ -391,14 +691,16 @@ export default function App() {
               </div>
             </div>
 
+            {/* Ticker */}
             <div className="ticker">
               <div className="ticker-inner">
                 {tickerItems.concat(tickerItems).map((item, i) => (
-                  <span className="ticker-item" key={i}>{item} <span className="ticker-dot" /></span>
+                  <span className="ticker-item" key={i}>{item}<span className="ticker-dot" /></span>
                 ))}
               </div>
             </div>
 
+            {/* Story */}
             <div className="story-section">
               <div className="story-grid">
                 <div>
@@ -410,18 +712,68 @@ export default function App() {
                     Over the years, we've grown into a trusted dehydration partner for spice blenders, food manufacturers, and exporters across Asia, Europe, and the Middle East.
                   </p>
                 </div>
-                <div style={{background: "var(--cream)", borderRadius: 16, height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-mid)", fontSize: 14}}>
-                  Farm images coming soon
+                <div style={{borderRadius:16,overflow:"hidden",height:360,position:"relative",boxShadow:"0 16px 48px rgba(26,58,31,0.18)"}}>
+                  <img src="https://i.ibb.co/XxPjM083/DSC-4975.jpg" alt="MNTP Farm Fresh fields in Solapur Maharashtra"
+                    style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}} />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to top, rgba(15,30,17,0.45) 0%, transparent 60%)"}} />
+                  <div style={{position:"absolute",bottom:20,left:20}}>
+                    <span style={{background:"rgba(196,135,58,0.9)",color:"white",fontSize:11,padding:"4px 14px",borderRadius:100,letterSpacing:1,textTransform:"uppercase"}}>Our Fields · Solapur</span>
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Farm Gallery */}
+            <div className="farm-gallery-section">
+              <div className="farm-gallery-inner">
+                <div className="farm-gallery-label">Straight from the Source</div>
+                <h2 className="farm-gallery-title">Life on the Farm</h2>
+                <div className="farm-mosaic">
+                  {FARM_PHOTOS.map((photo, i) => (
+                    <div className="mosaic-item" key={i} onClick={() => setLightboxPhoto(photo)}>
+                      <img src={photo.src} alt={photo.caption} loading="lazy" />
+                      <div className="mosaic-overlay" />
+                      <div className="mosaic-caption">
+                        <div><span className="mosaic-tag">{photo.tag}</span></div>
+                        <div className="mosaic-cap-text">{photo.caption}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Farm Video */}
+            <div className="farm-video-section">
+              <div className="farm-video-inner">
+                <div className="farm-video-text">
+                  <div className="section-label">Behind the Scenes</div>
+                  <h2 className="section-title">Watch Our Farm in Action</h2>
+                  <p className="section-body">
+                    From lush green fields to carefully tended produce — every crop we dehydrate begins its journey here, grown by farmers we know by name.
+                  </p>
+                  <div style={{marginTop:28,display:"flex",gap:12,flexWrap:"wrap"}}>
+                    <div className="video-badge">🎥 Farm footage</div>
+                    <div className="video-badge">📍 Solapur, Maharashtra</div>
+                  </div>
+                </div>
+                <div className="farm-video-wrap">
+                  <video controls playsInline preload="metadata"
+                    poster="https://i.ibb.co/XxPjM083/DSC-4975.jpg">
+                    <source src="https://res.cloudinary.com/djiomh95j/video/upload/v1779295208/WhatsApp_Video_2026-05-17_at_9.06.50_AM_mgswcp.mp4" type="video/mp4" />
+                    Your browser does not support video playback.
+                  </video>
+                </div>
+              </div>
+            </div>
+
+            {/* Values */}
             <div className="values-strip">
               {[
-                { icon: "🌱", title: "Farm-First", desc: "We source directly and pay fairly, building long-term trust with our growing communities." },
-                { icon: "🔬", title: "Science-Backed", desc: "Every drying curve and moisture target is validated by food scientists in our in-house lab." },
-                { icon: "🌾", title: "Sourced from Farm", desc: "Every batch is traced from field to final product — direct procurement ensures freshness, quality, and full traceability." },
-                { icon: "🌍", title: "Export-Ready", desc: "We manage FSSAI, APEDA, and phytosanitary compliance documentation so our partners can focus on their business." },
+                { icon:"🌱", title:"Farm-First",       desc:"We source directly and pay fairly, building long-term trust with our growing communities." },
+                { icon:"🔬", title:"Science-Backed",   desc:"Every drying curve and moisture target is validated by food scientists in our in-house lab." },
+                { icon:"🌾", title:"Sourced from Farm", desc:"Every batch is traced from field to final product — direct procurement ensures freshness, quality, and full traceability." },
+                { icon:"🌍", title:"Export-Ready",     desc:"We manage FSSAI, APEDA, and phytosanitary compliance documentation so our partners can focus on their business." },
               ].map((v, i) => (
                 <div className="value-item" key={i}>
                   <span className="value-icon">{v.icon}</span>
@@ -431,23 +783,26 @@ export default function App() {
               ))}
             </div>
 
+            {/* Home Enquiry */}
             <div className="home-enquiry">
               <div className="home-enquiry-inner">
                 <div>
                   <div className="section-label">Get In Touch</div>
                   <h2 className="section-title">Let's Grow Together</h2>
                   <p className="section-body">Looking for bulk dehydrated supply, export partnerships, or custom product development? Send us your requirements and we'll respond within 24 hours.</p>
-                  <div style={{ marginTop: 32 }}>
+                  <div style={{marginTop:32}}>
                     {[
-                      { icon: "📍", title: "Address", val: "G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
-                      { icon: "📞", title: "Phone", val: "+91 942359150" },
-                      { icon: "✉️", title: "Email", val: "contact@mntpfamfresh.com" },
+                      { icon:"📍", title:"Address", val:"G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
+                      { icon:"📞", title:"Phone",   val:"+91 9423591545", href:"tel:+919423591545" },
+                      { icon:"✉️", title:"Email",   val:"contact@mntpfarmfresh.com", href:"mailto:contact@mntpfarmfresh.com" },
                     ].map((item, i) => (
                       <div className="home-contact-item" key={i}>
                         <div className="home-ci-icon">{item.icon}</div>
                         <div>
                           <div className="home-ci-title">{item.title}</div>
-                          <div className="home-ci-val">{item.val}</div>
+                          {item.href
+                            ? <a href={item.href} className="home-ci-val" style={{color:"var(--text-mid)",textDecoration:"none"}}>{item.val}</a>
+                            : <div className="home-ci-val">{item.val}</div>}
                         </div>
                       </div>
                     ))}
@@ -460,6 +815,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Footer */}
             <footer>
               <div className="footer-top">
                 <div>
@@ -478,34 +834,39 @@ export default function App() {
           </div>
         )}
 
+        {/* ══════════════════════════════════════════════════
+            PRODUCTS PAGE
+        ══════════════════════════════════════════════════ */}
         {activeTab === "products" && (
           <div className="page" key="products">
-            <div className="products-main" style={{padding: "48px 64px 80px"}}>
+            <div className="products-main">
               <div className="products-main-header">
-                <div className="products-main-title">Our Products</div>
+                <h1 className="products-main-title">Our Products</h1>
                 <div className="products-main-sub">100% natural, chemical-free dehydrated produce — export grade, every batch.</div>
               </div>
               <div className="products-grid">
                 {PRODUCTS.map((p, i) => (
-                  <div className="product-card" key={i} onClick={() => setSelectedProduct(p)} style={{cursor:"pointer"}}>
+                  <div className="product-card" key={i} onClick={() => setSelectedProduct(p)}>
                     <div className="product-card-img-wrap">
-                      {p.mainImg ? (
-                        <img src={p.mainImg} alt={p.name} className="product-card-img" />
-                      ) : (
-                        <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text-mid)",fontSize:12}}>No image</div>
-                      )}
+                      {p.mainImg
+                        ? <img src={p.mainImg} alt={p.name} className="product-card-img" />
+                        : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text-mid)",fontSize:32}}>🌿</div>
+                      }
                     </div>
-                    <div className="product-card-name">{p.name}</div>
-                    <div className="product-card-forms">
-                      {p.forms.map((f, j) => <span className="product-card-form" key={j}>{f}</span>)}
+                    <div className="product-card-content" style={{flex:1,minWidth:0,overflow:"hidden"}}>
+                      <div className="product-card-name">{p.name}</div>
+                      <div className="product-card-forms">
+                        {p.forms.map((f, j) => <span className="product-card-form" key={j}>{f}</span>)}
+                      </div>
+                      <button className="product-card-btn"
+                        onClick={e => { e.stopPropagation(); setSelectedProduct(p); }}>View Details</button>
                     </div>
-                    <button className="product-card-btn" onClick={e => { e.stopPropagation(); setSelectedProduct(p); }}>View Details</button>
                   </div>
                 ))}
               </div>
             </div>
             <div className="products-cta-strip">
-              <p style={{ color: "rgba(245,240,232,0.7)", fontSize: 15, marginBottom: 20 }}>
+              <p style={{color:"rgba(245,240,232,0.7)",fontSize:15,marginBottom:20}}>
                 Need a custom blend, specific moisture grade, or private-label packaging?
               </p>
               <button className="hero-cta" onClick={() => setActiveTab("contact")}>Request a Quote →</button>
@@ -513,117 +874,83 @@ export default function App() {
           </div>
         )}
 
-        {/* PRODUCT DETAIL MODAL */}
+        {/* ── Product Detail Modal ── */}
         {selectedProduct && (
-          <div style={{
-            position:"fixed", inset:0, zIndex:200,
-            background:"rgba(15,30,17,0.72)", backdropFilter:"blur(6px)",
-            display:"flex", alignItems:"center", justifyContent:"center",
-            padding:"20px", animation:"pageIn 0.3s both"
-          }} onClick={() => setSelectedProduct(null)}>
-            <div style={{
-              background:"var(--white)", borderRadius:24, maxWidth:820, width:"100%",
-              maxHeight:"90vh", overflow:"hidden", display:"flex", flexDirection:"column",
-              boxShadow:"0 32px 80px rgba(0,0,0,0.35)", animation:"pageIn 0.35s both"
-            }} onClick={e => e.stopPropagation()}>
+          <div style={{position:"fixed",inset:0,zIndex:200,background:"rgba(15,30,17,0.72)",backdropFilter:"blur(6px)",display:"flex",alignItems:"flex-end",justifyContent:"center",padding:"0",animation:"pageIn 0.3s both"}}
+            onClick={() => setSelectedProduct(null)}>
+            <div style={{background:"var(--white)",borderRadius:"20px 20px 0 0",width:"100%",maxWidth:820,maxHeight:"92vh",overflow:"hidden",display:"flex",flexDirection:"column",boxShadow:"0 -8px 40px rgba(0,0,0,0.35)",animation:"slideUp 0.35s cubic-bezier(0.22,1,0.36,1) both"}}
+              onClick={e => e.stopPropagation()}>
 
-              {/* Modal Header */}
-              <div style={{display:"flex", gap:0, position:"relative"}}>
-                {/* Image panel */}
-                <div style={{
-                  width:260, flexShrink:0, background:"var(--cream)",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  borderRadius:"24px 0 0 0", overflow:"hidden", minHeight:220
-                }}>
-                  {selectedProduct.mainImg ? (
-                    <img src={selectedProduct.mainImg} alt={selectedProduct.name}
-                      style={{width:"100%", height:"100%", objectFit:"cover", display:"block"}} />
-                  ) : (
-                    <div style={{fontSize:48}}>🌿</div>
-                  )}
-                </div>
-                {/* Title panel */}
-                <div style={{
-                  flex:1, background:"var(--green-deep)", padding:"32px 36px",
-                  borderRadius:"0 24px 0 0", display:"flex", flexDirection:"column", justifyContent:"center"
-                }}>
-                  <div style={{fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"var(--amber-light)", marginBottom:8}}>Product Details</div>
-                  <div style={{fontFamily:"'Playfair Display', serif", fontSize:28, fontWeight:700, color:"var(--cream)", lineHeight:1.2, marginBottom:14}}>{selectedProduct.name}</div>
-                  <p style={{fontSize:14, lineHeight:1.75, color:"rgba(245,240,232,0.72)", maxWidth:380}}>{selectedProduct.desc}</p>
-                  <div style={{display:"flex", flexWrap:"wrap", gap:6, marginTop:16}}>
-                    {selectedProduct.forms.map((f, i) => (
-                      <span key={i} style={{background:"rgba(255,255,255,0.12)", color:"var(--cream)", fontSize:11, padding:"3px 12px", borderRadius:100, border:"1px solid rgba(255,255,255,0.15)"}}>{f}</span>
-                    ))}
-                  </div>
-                </div>
-                {/* Close btn */}
-                <button onClick={() => setSelectedProduct(null)} style={{
-                  position:"absolute", top:16, right:16, width:36, height:36,
-                  borderRadius:"50%", background:"rgba(255,255,255,0.15)", border:"1px solid rgba(255,255,255,0.25)",
-                  color:"var(--white)", fontSize:18, cursor:"pointer", display:"flex",
-                  alignItems:"center", justifyContent:"center", lineHeight:1
-                }}>×</button>
+              <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}>
+                <div style={{width:40,height:4,borderRadius:2,background:"var(--cream-dark)"}} />
               </div>
 
-              {/* Specs Grid */}
-              <div style={{padding:"28px 36px", overflowY:"auto", flex:1}}>
-                <div style={{fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"var(--green-mid)", fontWeight:600, marginBottom:16}}>Technical Specifications</div>
-                <div style={{
-                  display:"grid", gridTemplateColumns:"repeat(3, 1fr)",
-                  border:"1px solid var(--cream-dark)", borderRadius:12, overflow:"hidden"
-                }}>
-                  {Object.entries(selectedProduct.specs).map(([key, val], i) => (
-                    <div key={i} style={{
-                      padding:"16px 20px",
-                      borderRight: (i % 3 !== 2) ? "1px solid var(--cream-dark)" : "none",
-                      borderBottom: (i < Object.keys(selectedProduct.specs).length - 3) ? "1px solid var(--cream-dark)" : "none",
-                      background: i % 2 === 0 ? "var(--white)" : "#faf8f3"
-                    }}>
-                      <div style={{fontSize:10, letterSpacing:1, textTransform:"uppercase", color:"var(--green-mid)", marginBottom:4, fontWeight:500}}>{key}</div>
-                      <div style={{fontSize:15, fontWeight:600, color:"var(--green-deep)"}}>{val}</div>
+              <div style={{display:"flex",flexDirection:"column",position:"relative"}}>
+                <button onClick={() => setSelectedProduct(null)} style={{position:"absolute",top:12,right:16,width:36,height:36,borderRadius:"50%",background:"rgba(0,0,0,0.12)",border:"none",color:"var(--white)",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",zIndex:10,lineHeight:1}}>×</button>
+
+                <div style={{display:"flex",background:"var(--green-deep)",padding:"20px",gap:16,alignItems:"center"}}>
+                  <div style={{width:90,height:90,borderRadius:12,overflow:"hidden",background:"var(--cream)",flexShrink:0,border:"2px solid rgba(255,255,255,0.15)"}}>
+                    {selectedProduct.mainImg
+                      ? <img src={selectedProduct.mainImg} alt={selectedProduct.name} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                      : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32}}>🌿</div>
+                    }
+                  </div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--amber-light)",marginBottom:6}}>Product Details</div>
+                    <div style={{fontFamily:"'Playfair Display', serif",fontSize:22,fontWeight:700,color:"var(--cream)",lineHeight:1.2,marginBottom:10}}>{selectedProduct.name}</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                      {selectedProduct.forms.map((f, i) => (
+                        <span key={i} style={{background:"rgba(255,255,255,0.12)",color:"var(--cream)",fontSize:10,padding:"2px 10px",borderRadius:100,border:"1px solid rgba(255,255,255,0.15)"}}>{f}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{padding:"16px 20px 0",background:"var(--white)"}}>
+                  <p style={{fontSize:13,lineHeight:1.7,color:"var(--text-mid)"}}>{selectedProduct.desc}</p>
+                </div>
+              </div>
+
+              <div style={{padding:"16px 20px 24px",overflowY:"auto",flex:1}}>
+                <div style={{fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--green-mid)",fontWeight:600,marginBottom:12}}>Technical Specifications</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(2, 1fr)",border:"1px solid var(--cream-dark)",borderRadius:12,overflow:"hidden"}}>
+                  {Object.entries(selectedProduct.specs).map(([key, val], i, arr) => (
+                    <div key={i} style={{padding:"12px 14px",borderRight:(i%2!==1)?"1px solid var(--cream-dark)":"none",borderBottom:(i<arr.length-2)?"1px solid var(--cream-dark)":"none",background:i%2===0?"var(--white)":"#faf8f3"}}>
+                      <div style={{fontSize:9,letterSpacing:1,textTransform:"uppercase",color:"var(--green-mid)",marginBottom:3,fontWeight:500}}>{key}</div>
+                      <div style={{fontSize:14,fontWeight:600,color:"var(--green-deep)"}}>{val}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* CTA row */}
-                <div style={{display:"flex", gap:12, marginTop:24, paddingTop:20, borderTop:"1px solid var(--cream-dark)"}}>
-                  <button style={{
-                    flex:1, background:"var(--green-deep)", color:"var(--cream)", border:"none",
-                    padding:"13px 24px", borderRadius:10, fontSize:14, fontWeight:500,
-                    cursor:"pointer", fontFamily:"'DM Sans', sans-serif", transition:"all 0.2s"
-                  }} onClick={() => { goToContact(selectedProduct.name); setSelectedProduct(null); }}
-                    onMouseEnter={e => e.target.style.background="var(--amber)"}
-                    onMouseLeave={e => e.target.style.background="var(--green-deep)"}>
+                <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:20}}>
+                  <button style={{background:"var(--green-deep)",color:"var(--cream)",border:"none",padding:"14px 24px",borderRadius:10,fontSize:15,fontWeight:500,cursor:"pointer",fontFamily:"'DM Sans', sans-serif",width:"100%"}}
+                    onClick={() => { goToContact(selectedProduct.name); setSelectedProduct(null); }}>
                     🌿 Request a Quote
                   </button>
-                  <a href="https://wa.me/91942359150" target="_blank" rel="noopener noreferrer" style={{
-                    display:"flex", alignItems:"center", gap:8, background:"#25D366", color:"white",
-                    padding:"13px 24px", borderRadius:10, fontSize:14, fontWeight:500,
-                    textDecoration:"none", whiteSpace:"nowrap"
-                  }}>
+                  <a href="https://wa.me/919423591545" target="_blank" rel="noopener noreferrer"
+                    style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,background:"#25D366",color:"white",padding:"14px 24px",borderRadius:10,fontSize:15,fontWeight:500,textDecoration:"none",width:"100%"}}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.525 5.847L.057 23.982l6.31-1.653A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.812 9.812 0 01-5.018-1.382l-.36-.214-3.736.979 1-3.635-.234-.374A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
                     WhatsApp Us
                   </a>
-                  <button style={{
-                    background:"transparent", color:"var(--text-mid)", border:"1.5px solid var(--cream-dark)",
-                    padding:"13px 20px", borderRadius:10, fontSize:14, cursor:"pointer",
-                    fontFamily:"'DM Sans', sans-serif"
-                  }} onClick={() => setSelectedProduct(null)}>Close</button>
                 </div>
               </div>
             </div>
           </div>
         )}
 
+        {/* ══════════════════════════════════════════════════
+            QUALITY PAGE
+        ══════════════════════════════════════════════════ */}
         {activeTab === "quality" && (
           <div className="page" key="quality">
             <div className="quality-hero">
               <div className="section-label">Standards & Certifications</div>
-              <h2 className="section-title">Quality You Can Trust</h2>
-              <p className="section-body" style={{ margin: "0 auto 40px", color: "var(--text-mid)", textAlign: "center", maxWidth: 520 }}>
+              <h1 className="section-title">Quality You Can Trust</h1>
+              <p className="section-body" style={{margin:"0 auto 40px",color:"var(--text-mid)",textAlign:"center",maxWidth:520}}>
                 From soil to shipment, every step is governed by documented protocols and third-party verified standards.
               </p>
             </div>
+
             <div className="quality-timeline">
               {QUALITY_STEPS.map((s, i) => (
                 <div className="qt-item" key={i}>
@@ -639,13 +966,14 @@ export default function App() {
                 </div>
               ))}
             </div>
+
             <div className="cert-strip">
               {[
-                { icon: "🏅", name: "FSSAI Licensed", note: "Food Safety & Standards" },
-                { icon: "🌐", name: "ISO 22000", note: "Food Management Systems" },
-                { icon: "🌿", name: "APEDA Registered", note: "Agri Exports India" },
-                { icon: "🔬", name: "Lab Tested", note: "3rd Party Verified" },
-                { icon: "📋", name: "Phytosanitary", note: "Export Documentation" },
+                { icon:"🏅", name:"FSSAI Licensed",    note:"Food Safety & Standards"    },
+                { icon:"🌐", name:"ISO 22000",          note:"Food Management Systems"    },
+                { icon:"🌿", name:"APEDA Registered",  note:"Agri Exports India"         },
+                { icon:"🔬", name:"Lab Tested",         note:"3rd Party Verified"         },
+                { icon:"📋", name:"Phytosanitary",      note:"Export Documentation"       },
               ].map((c, i) => (
                 <div className="cert-badge" key={i}>
                   <span className="cert-icon">{c.icon}</span>
@@ -657,52 +985,174 @@ export default function App() {
           </div>
         )}
 
+        {/* ══════════════════════════════════════════════════
+            PROCESS PAGE
+        ══════════════════════════════════════════════════ */}
         {activeTab === "process" && (
           <div className="page" key="process">
             <div className="process-hero">
               <div className="section-label">How We Work</div>
-              <h2 className="section-title">The Dehydration Process</h2>
+              <h1 className="section-title">Process Flow & Critical Control Points</h1>
               <p className="section-body">
-                A 7-stage journey that transforms fresh farm produce into shelf-stable, export-grade dehydrated products — without additives or preservatives.
+                An 11-stage HACCP-aligned process that transforms fresh farm produce into export-grade dehydrated ingredients — with 6 Critical Control Points ensuring food safety at every step.
               </p>
             </div>
-            <div className="process-steps">
-              {PROCESS_STEPS.map((s, i) => (
-                <div className="process-step" key={i}>
-                  <div><div className="step-num">{i + 1}</div></div>
-                  <div>
-                    <span className="step-tag">{s.tag}</span>
-                    <div className="step-title">{s.title}</div>
-                    <div className="step-desc">{s.desc}</div>
-                    <div className="step-details">
-                      {s.details.map((d, j) => <span className="step-detail" key={j}>{d}</span>)}
+
+            {/* Stats banner */}
+            <div className="process-banner" style={{background:"var(--amber)",padding:"28px 80px",display:"flex",gap:0,justifyContent:"center",flexWrap:"wrap"}}>
+              {[
+                { val:"1.6 MT/day",                    label:"Dehydration Capacity"   },
+                { val:"Ozonization + Blanching",        label:"Microbial Control System" },
+                { val:"Heat Pump + Electric + Solar",   label:"Drying System"           },
+              ].map((s, i) => (
+                <div key={i} style={{flex:1,minWidth:200,textAlign:"center",padding:"0 24px",borderRight:i<2?"1px solid rgba(255,255,255,0.3)":"none"}}>
+                  <div style={{fontFamily:"'Playfair Display', serif",fontSize:20,fontWeight:700,color:"white",marginBottom:4}}>{s.val}</div>
+                  <div style={{fontSize:12,letterSpacing:1,textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Facility */}
+            <div className="facility-section" style={{background:"var(--cream)",padding:"64px 80px"}}>
+              <div style={{maxWidth:1100,margin:"0 auto"}}>
+                <div className="section-label">Our Facility</div>
+                <h2 className="section-title" style={{marginBottom:8}}>Salient Features</h2>
+                <p style={{fontSize:15,color:"var(--text-mid)",marginBottom:32,lineHeight:1.7}}>MNTP FarmFresh Pvt. Ltd. is a dehydrated food ingredient manufacturer built on an integrated farm-to-processing model. We deliver consistent, export-grade products with controlled processing, scalable capacity, and specification-driven supply.</p>
+
+                <div style={{borderRadius:14,overflow:"hidden",boxShadow:"0 8px 32px rgba(26,58,31,0.15)",marginBottom:24,position:"relative"}}>
+                  <img src="https://i.ibb.co/FLMf8Ybv/Screenshot-2026-05-28-164049.png" alt="MNTP FarmFresh dehydration plant aerial view Chincholi MIDC Solapur"
+                    style={{width:"100%",height:"auto",display:"block"}} />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to top, rgba(15,30,17,0.6) 0%, transparent 50%)"}} />
+                  <div style={{position:"absolute",bottom:20,left:24}}>
+                    <span style={{background:"rgba(196,135,58,0.9)",color:"white",fontSize:11,padding:"5px 16px",borderRadius:100,letterSpacing:1,textTransform:"uppercase"}}>Our Plant · Chincholi MIDC, Solapur</span>
+                  </div>
+                </div>
+
+                <div className="facility-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
+                  <div style={{borderRadius:14,overflow:"hidden",boxShadow:"0 8px 32px rgba(26,58,31,0.12)"}}>
+                    <img src="https://i.ibb.co/r25TdfrP/Screenshot-2026-05-28-164102.png" alt="Sorting cutting washing processing line MNTP Farm Fresh"
+                      style={{width:"100%",height:240,objectFit:"cover",display:"block"}} />
+                    <div style={{padding:"16px 20px",background:"white"}}>
+                      <div style={{fontSize:13,fontWeight:600,color:"var(--green-deep)",marginBottom:4}}>Sorting, Cutting & Washing Line</div>
+                      <div style={{fontSize:12,color:"var(--text-mid)",lineHeight:1.6}}>Equipped with sorting, cutting, washing, blanching and handling systems ensuring pesticide free, heavy metal free and dust free finished product.</div>
+                    </div>
+                  </div>
+                  <div style={{borderRadius:14,overflow:"hidden",boxShadow:"0 8px 32px rgba(26,58,31,0.12)"}}>
+                    <img src="https://i.ibb.co/Y4xFpjyt/Screenshot-2026-05-28-164119.png" alt="PUF panel temperature controlled processing area MNTP Farm Fresh"
+                      style={{width:"100%",height:240,objectFit:"cover",display:"block"}} />
+                    <div style={{padding:"16px 20px",background:"white"}}>
+                      <div style={{fontSize:13,fontWeight:600,color:"var(--green-deep)",marginBottom:4}}>PUF Panel Processing Area</div>
+                      <div style={{fontSize:12,color:"var(--text-mid)",lineHeight:1.6}}>Temperature-controlled, dust-free processing area built with PUF panel construction for hygienic food manufacturing environments.</div>
                     </div>
                   </div>
                 </div>
-              ))}
+
+                <div className="plant-stats-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,marginTop:24}}>
+                  {[
+                    { icon:"⚙️", val:"1.6 MT/day",                  label:"Dehydration Capacity"   },
+                    { icon:"🧪", val:"Ozonization + Blanching",      label:"Microbial Control System" },
+                    { icon:"☀️", val:"Heat Pump + Electric + Solar", label:"Drying Systems"          },
+                  ].map((s, i) => (
+                    <div key={i} style={{background:"white",borderRadius:12,padding:"20px 16px",textAlign:"center",border:"1px solid var(--cream-dark)",boxShadow:"0 2px 8px rgba(26,58,31,0.06)"}}>
+                      <div style={{fontSize:28,marginBottom:8}}>{s.icon}</div>
+                      <div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:"var(--green-deep)",marginBottom:4}}>{s.val}</div>
+                      <div style={{fontSize:11,color:"var(--text-mid)",letterSpacing:0.5,textTransform:"uppercase"}}>{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* CCP Legend */}
+            <div className="ccp-legend" style={{background:"var(--white)",padding:"48px 80px 0"}}>
+              <div style={{maxWidth:900,margin:"0 auto"}}>
+                <div className="section-label" style={{textAlign:"center",marginBottom:16}}>Colour Legend</div>
+                <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:8}}>
+                  {[
+                    { color:"#2d6a35", label:"Raw Material"             },
+                    { color:"#b85450", label:"Critical Control Point (CCP)" },
+                    { color:"#d4a017", label:"Post Harvest Processing"   },
+                    { color:"#4a9e55", label:"Drying / Processing"       },
+                    { color:"#7b5ea7", label:"Packaging"                 },
+                    { color:"#5ba4a4", label:"Cold Storage"              },
+                  ].map((l, i) => (
+                    <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
+                      <div style={{width:14,height:14,borderRadius:3,background:l.color,flexShrink:0}} />
+                      <span style={{fontSize:12,color:"var(--text-mid)"}}>{l.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Process flow */}
+            <div className="process-flow" style={{background:"var(--white)",padding:"32px 80px 80px"}}>
+              <div style={{maxWidth:900,margin:"0 auto",display:"flex",flexDirection:"column",alignItems:"center"}}>
+                {PROCESS_STEPS.map((s, i) => (
+                  <div key={i} style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"center"}}>
+                    <div style={{width:"100%",maxWidth:620,background:s.color,borderRadius:12,padding:"18px 24px",boxShadow:"0 4px 16px rgba(0,0,0,0.12)"}}>
+                      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12}}>
+                        <div style={{flex:1}}>
+                          {s.ccpNum && (
+                            <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(0,0,0,0.2)",borderRadius:100,padding:"2px 10px",marginBottom:8}}>
+                              <span style={{fontSize:10,fontWeight:700,color:"rgba(255,255,255,0.95)",letterSpacing:1.5,textTransform:"uppercase"}}>CCP {s.ccpNum}</span>
+                            </div>
+                          )}
+                          <div style={{fontSize:16,fontWeight:700,color:"white",marginBottom:s.ccp?4:0,fontFamily:"'Playfair Display', serif"}}>{s.title}</div>
+                          {s.ccp && <div style={{fontSize:12,color:"rgba(255,255,255,0.8)",fontStyle:"italic"}}>{s.ccp}</div>}
+                        </div>
+                        <div style={{background:"rgba(255,255,255,0.15)",borderRadius:8,padding:"6px 12px",flexShrink:0}}>
+                          <div style={{fontSize:10,color:"rgba(255,255,255,0.7)",letterSpacing:1,textTransform:"uppercase"}}>{s.tag}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{width:"100%",maxWidth:580,background:"var(--cream)",borderRadius:"0 0 10px 10px",padding:"14px 20px",borderLeft:`3px solid ${s.color}`}}>
+                      <p style={{fontSize:13,color:"var(--text-mid)",lineHeight:1.7,marginBottom:10}}>{s.desc}</p>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                        {s.details.map((d, j) => (
+                          <span key={j} style={{background:"white",border:"1px solid var(--cream-dark)",color:"var(--green-mid)",fontSize:11,padding:"3px 10px",borderRadius:100}}>{d}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {i < PROCESS_STEPS.length - 1 && (
+                      <div style={{display:"flex",flexDirection:"column",alignItems:"center",margin:"4px 0"}}>
+                        <div style={{width:2,height:20,background:"var(--cream-dark)"}} />
+                        <div style={{width:0,height:0,borderLeft:"8px solid transparent",borderRight:"8px solid transparent",borderTop:"10px solid var(--cream-dark)"}} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
 
+        {/* ══════════════════════════════════════════════════
+            CONTACT PAGE
+        ══════════════════════════════════════════════════ */}
         {activeTab === "contact" && (
           <div className="page" key="contact">
             <div className="contact-page">
               <div className="contact-left">
                 <div className="section-label">Get In Touch</div>
-                <h2 className="section-title">Let's Grow Together</h2>
+                <h1 className="section-title">Let's Grow Together</h1>
                 <p className="section-body">Whether you're looking for bulk dehydrated supply, export partnerships, or custom product development — our team is ready to help.</p>
                 <div className="contact-info">
                   {[
-                    { icon: "📍", title: "Address", val: "G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
-                    { icon: "📞", title: "Phone", val: "+91 942359150" },
-                    { icon: "✉️", title: "Email", val: "contact@mntpfamfresh.com" },
-                    { icon: "🕐", title: "Working Hours", val: "Mon – Sat, 9:00 AM – 6:30 PM IST" },
+                    { icon:"📍", title:"Address",       val:"G4 Chincholi MIDC, Solapur, Maharashtra – 413255" },
+                    { icon:"📞", title:"Phone",         val:"+91 9423591545", href:"tel:+919423591545" },
+                    { icon:"✉️", title:"Email",         val:"contact@mntpfarmfresh.com", href:"mailto:contact@mntpfarmfresh.com" },
+                    { icon:"🕐", title:"Working Hours", val:"Mon – Sat, 9:00 AM – 6:30 PM IST" },
                   ].map((item, i) => (
                     <div className="contact-info-item" key={i}>
                       <div className="ci-icon">{item.icon}</div>
                       <div>
                         <div className="ci-title">{item.title}</div>
-                        <div className="ci-val">{item.val}</div>
+                        {item.href
+                          ? <a href={item.href} className="ci-val" style={{color:"rgba(245,240,232,0.85)",textDecoration:"none"}}>{item.val}</a>
+                          : <div className="ci-val">{item.val}</div>}
                       </div>
                     </div>
                   ))}
@@ -716,14 +1166,24 @@ export default function App() {
           </div>
         )}
 
-      </div>
+      </div>{/* end site-wrapper */}
 
-      <a className="whatsapp-float" href="https://wa.me/91942359150" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      {/* Lightbox */}
+      {lightboxPhoto && (
+        <div className="lightbox-overlay" onClick={() => setLightboxPhoto(null)}>
+          <button className="lightbox-close" onClick={() => setLightboxPhoto(null)}>×</button>
+          <img className="lightbox-img" src={lightboxPhoto.src} alt={lightboxPhoto.caption} onClick={e => e.stopPropagation()} />
+          <div className="lightbox-caption">{lightboxPhoto.caption}</div>
+        </div>
+      )}
+
+      {/* WhatsApp float */}
+      <a className="whatsapp-float" href="https://wa.me/919423591545" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
         <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
           <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.525 5.847L.057 23.982l6.31-1.653A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.812 9.812 0 01-5.018-1.382l-.36-.214-3.736.979 1-3.635-.234-.374A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
         </svg>
       </a>
-    </>
+    </HelmetProvider>
   );
 }
